@@ -138,3 +138,42 @@ ul.navigation a.active {
     width: 100%;
 }
 
+.restaurant {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+menu.category {
+    margin-bottom: 30px;
+}
+
+menu.h1 {
+    text-align: center;
+    color: #333;
+}
+
+menu.h2 {
+    color: #444;
+}
+
+menu.ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+menu.li {
+    padding: 10px;
+    margin: 5px 0;
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+menu.li span {
+    display: block;
+    font-size: 14px;
+    color: #777;
+}
