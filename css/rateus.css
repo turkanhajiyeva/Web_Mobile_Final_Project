@@ -110,4 +110,52 @@ ul.navigation a.active {
     border-radius: 50%; /* optional: makes them perfect circles */
 }
 
+.rating-form {
+    width: 80%;
+    max-width: 600px;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
 
+.rating-group {
+    margin-bottom: 15px;
+}
+
+.rating-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.rating-group select,
+.rating-group textarea,
+.rating-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #aaa;
+    border-radius: 8px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.rating-group textarea {
+    resize: vertical;
+}
+
+button[type="submit"] {
+    background-color: #2a7b9b;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #1f5e77;
+}

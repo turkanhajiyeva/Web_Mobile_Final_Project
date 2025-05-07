@@ -35,5 +35,48 @@
             <li><a href="contactus.html">Contact Us</a></li>
             <li><a href="events.html">Events</a></li>
         </ul>
+
+        <form class="rating-form" action="submit_rating.php" method="POST">
+            <div class="rating-group">
+                <label for="service">Rate our service:</label>
+                <select name="service" id="service" required>
+                    <option value="">Choose</option>
+                    <option value="5">★★★★★ - Excellent</option>
+                    <option value="4">★★★★☆ - Good</option>
+                    <option value="3">★★★☆☆ - Average</option>
+                    <option value="2">★★☆☆☆ - Poor</option>
+                    <option value="1">★☆☆☆☆ - Bad</option>
+                </select>
+            </div>
+        
+            <div class="rating-group">
+                <label for="food">Rate our food:</label>
+                <select name="food" id="food" required>
+                    <option value="">Choose</option>
+                    <option value="5">★★★★★ - Excellent</option>
+                    <option value="4">★★★★☆ - Good</option>
+                    <option value="3">★★★☆☆ - Average</option>
+                    <option value="2">★★☆☆☆ - Poor</option>
+                    <option value="1">★☆☆☆☆ - Bad</option>
+                </select>
+            </div>
+        
+            <div class="rating-group">
+                <label for="feedback">Feedback:</label>
+                <textarea id="feedback" name="feedback" rows="4" placeholder="You can share your feedback with us" required></textarea>
+            </div>
+        
+            <div class="rating-group">
+                <label for="name">Name and Surname:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+        
+            <div class="rating-group">
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" pattern="[0-9]{10,15}" required>
+            </div>
+        
+            <button type="submit">Submit</button>
+        </form>
     </body>
 </html>
