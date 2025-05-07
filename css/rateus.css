@@ -1,0 +1,85 @@
+body {
+    background-color: #c6d0f5;
+    padding:0;
+    font-style: italic;
+    margin:0;
+    background-image: url(https://i.pinimg.com/originals/2f/fd/12/2ffd12fdc3613c6f6aa4b77c6fb98e07.jpg);
+    background-size: 1560PX;
+}
+
+hr {
+    width: 50%;
+    border-top: 5px dotted;
+}
+
+div.container img.container {
+    border-radius: 50%;
+    max-width: 100%;
+    max-height:100%;
+    float: left;    /* The element floats to the left of its container */
+    margin-left: 200px;
+    margin-right: 20px;
+}
+
+div.container img.container:hover {
+    width: 220px;
+    height: 220px;
+    transform: scale(1.1);  /* transform: scale(x,y) defines a 2D scale transformation */
+}
+
+ul {
+    list-style-type: disc;
+    margin-left: 30px;
+}
+
+
+p {
+    margin-left: 30px;
+}
+
+h2 {
+    margin-left: 30px;
+}
+
+h3 {
+    margin-left: 30px;
+}
+
+
+ul.navigation {
+    display:flex;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    width: 100vw; 
+    margin: 0;
+    list-style-type: none;
+    background-color: rgb(42, 123, 155, 0.759);
+    padding: 0;
+}
+
+ul.navigation li {
+    background-color: rgb(42, 123, 155, 0.759);
+    float: left;
+}
+
+ul.navigation li a {
+    display: block;
+    color: black;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+ul.navigation a:hover:not(.active) {
+    background-color: rgba(42, 123, 155, 0.759);
+    color: rgb(42, 123, 155);
+}
+
+ul.navigation a.active {
+    color: white;
+}
+
+.active {
+    background-color: rgb(42, 123, 155);
+}

@@ -3,7 +3,7 @@ body {
     padding:0;
     font-style: italic;
     margin:0;
-    background-image: url(https://i.pinimg.com/originals/2f/fd/12/2ffd12fdc3613c6f6aa4b77c6fb98e07.jpg);
+    /* background-image: url(https://i.pinimg.com/originals/2f/fd/12/2ffd12fdc3613c6f6aa4b77c6fb98e07.jpg); */
     background-size: 1560PX;
 }
 
@@ -19,12 +19,6 @@ div.container img.container {
     float: left;    /* The element floats to the left of its container */
     margin-left: 200px;
     margin-right: 20px;
-}
-
-div.container img.container:hover {
-    width: 220px;
-    height: 220px;
-    transform: scale(1.1);  /* transform: scale(x,y) defines a 2D scale transformation */
 }
 
 ul {
