@@ -1,0 +1,244 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "image": "images/burger1.jpg",
+      "name": "Classic Cheeseburger",
+      "description": "Juicy grilled beef patty with cheddar cheese, lettuce, tomato, and onion.",
+      "price": 8.99,
+      "stock": 25
+    },
+    {
+      "id": 2,
+      "image": "images/burger2.jpg",
+      "name": "Bacon BBQ Burger",
+      "description": "Smoked bacon, BBQ sauce, cheddar cheese, and crispy onion rings.",
+      "price": 10.49,
+      "stock": 18
+    },
+    {
+      "id": 3,
+      "image": "images/pizza1.jpg",
+      "name": "Margherita Pizza",
+      "description": "Fresh mozzarella, tomatoes, and basil on a crispy crust.",
+      "price": 9.99,
+      "stock": 20
+    },
+    {
+      "id": 4,
+      "image": "images/pizza2.jpg",
+      "name": "Pepperoni Pizza",
+      "description": "Classic pizza topped with pepperoni and mozzarella cheese.",
+      "price": 11.49,
+      "stock": 15
+    },
+    {
+      "id": 5,
+      "image": "images/pasta1.jpg",
+      "name": "Spaghetti Bolognese",
+      "description": "Traditional Italian pasta with rich meat sauce.",
+      "price": 12.99,
+      "stock": 22
+    },
+    {
+      "id": 6,
+      "image": "images/pasta2.jpg",
+      "name": "Creamy Alfredo Fettuccine",
+      "description": "Fettuccine pasta with creamy Alfredo sauce and parmesan.",
+      "price": 13.49,
+      "stock": 19
+    },
+    {
+      "id": 7,
+      "image": "images/salad1.jpg",
+      "name": "Caesar Salad",
+      "description": "Romaine lettuce, croutons, and Caesar dressing.",
+      "price": 7.99,
+      "stock": 30
+    },
+    {
+      "id": 8,
+      "image": "images/salad2.jpg",
+      "name": "Greek Salad",
+      "description": "Tomatoes, cucumbers, olives, and feta cheese.",
+      "price": 8.49,
+      "stock": 28
+    },
+    {
+      "id": 9,
+      "image": "images/dessert1.jpg",
+      "name": "Chocolate Lava Cake",
+      "description": "Warm chocolate cake with a gooey center.",
+      "price": 6.99,
+      "stock": 16
+    },
+    {
+      "id": 10,
+      "image": "images/dessert2.jpg",
+      "name": "Vanilla Cheesecake",
+      "description": "Creamy cheesecake with a graham cracker crust.",
+      "price": 6.49,
+      "stock": 14
+    },
+    {
+      "id": 11,
+      "image": "images/drink1.jpg",
+      "name": "Lemon Iced Tea",
+      "description": "Refreshing iced tea with a hint of lemon.",
+      "price": 2.99,
+      "stock": 35
+    },
+    {
+      "id": 12,
+      "image": "images/drink2.jpg",
+      "name": "Strawberry Smoothie",
+      "description": "Blended strawberries, yogurt, and ice.",
+      "price": 4.49,
+      "stock": 25
+    },
+    {
+      "id": 13,
+      "image": "images/appetizer1.jpg",
+      "name": "Mozzarella Sticks",
+      "description": "Crispy fried mozzarella with marinara sauce.",
+      "price": 5.99,
+      "stock": 20
+    },
+    {
+      "id": 14,
+      "image": "images/appetizer2.jpg",
+      "name": "Chicken Wings",
+      "description": "Spicy buffalo wings served with ranch.",
+      "price": 9.49,
+      "stock": 18
+    },
+    {
+      "id": 15,
+      "image": "images/breakfast1.jpg",
+      "name": "Pancake Stack",
+      "description": "Fluffy pancakes served with syrup and butter.",
+      "price": 7.49,
+      "stock": 24
+    },
+    {
+      "id": 16,
+      "image": "images/breakfast2.jpg",
+      "name": "Eggs Benedict",
+      "description": "Poached eggs, Canadian bacon, and hollandaise on English muffins.",
+      "price": 8.99,
+      "stock": 17
+    },
+    {
+      "id": 17,
+      "image": "images/soup1.jpg",
+      "name": "Tomato Soup",
+      "description": "Classic creamy tomato soup with herbs.",
+      "price": 4.99,
+      "stock": 21
+    },
+    {
+      "id": 18,
+      "image": "images/soup2.jpg",
+      "name": "Chicken Noodle Soup",
+      "description": "Hearty soup with chicken, noodles, and vegetables.",
+      "price": 5.49,
+      "stock": 19
+    },
+    {
+      "id": 19,
+      "image": "images/seafood1.jpg",
+      "name": "Grilled Salmon",
+      "description": "Fresh salmon fillet with lemon butter sauce.",
+      "price": 15.99,
+      "stock": 12
+    },
+    {
+      "id": 20,
+      "image": "images/seafood2.jpg",
+      "name": "Shrimp Scampi",
+      "description": "Shrimp sautéed in garlic butter and white wine.",
+      "price": 14.49,
+      "stock": 10
+    },
+    {
+      "id": 21,
+      "image": "images/vegan1.jpg",
+      "name": "Vegan Burger",
+      "description": "Plant-based patty with lettuce, tomato, and vegan mayo.",
+      "price": 9.99,
+      "stock": 23
+    },
+    {
+      "id": 22,
+      "image": "images/vegan2.jpg",
+      "name": "Tofu Stir Fry",
+      "description": "Tofu with mixed vegetables in soy-ginger sauce.",
+      "price": 11.49,
+      "stock": 20
+    },
+    {
+      "id": 23,
+      "image": "images/sandwich1.jpg",
+      "name": "Turkey Club Sandwich",
+      "description": "Sliced turkey, bacon, lettuce, tomato, and mayo.",
+      "price": 8.49,
+      "stock": 22
+    },
+    {
+      "id": 24,
+      "image": "images/sandwich2.jpg",
+      "name": "Grilled Cheese Sandwich",
+      "description": "Melted cheese on toasted bread.",
+      "price": 5.99,
+      "stock": 25
+    },
+    {
+      "id": 25,
+      "image": "images/rice1.jpg",
+      "name": "Chicken Fried Rice",
+      "description": "Rice stir-fried with chicken, eggs, and vegetables.",
+      "price": 10.49,
+      "stock": 19
+    },
+    {
+      "id": 26,
+      "image": "images/rice2.jpg",
+      "name": "Vegetable Biryani",
+      "description": "Spiced rice with mixed vegetables and herbs.",
+      "price": 9.99,
+      "stock": 18
+    },
+    {
+      "id": 27,
+      "image": "images/noodles1.jpg",
+      "name": "Beef Chow Mein",
+      "description": "Stir-fried noodles with beef and vegetables.",
+      "price": 11.49,
+      "stock": 17
+    },
+    {
+      "id": 28,
+      "image": "images/noodles2.jpg",
+      "name": "Vegetable Ramen",
+      "description": "Noodle soup with vegetables in a savory broth.",
+      "price": 10.99,
+      "stock": 20
+    },
+    {
+      "id": 29,
+      "image": "images/dessert3.jpg",
+      "name": "Tiramisu",
+      "description": "Classic Italian dessert with coffee-soaked layers.",
+      "price": 6.99,
+      "stock": 14
+    },
+    {
+      "id": 30,
+      "image": "images/drink3.jpg",
+      "name": "Mango Lassi",
+      "description": "Sweet mango yogurt drink.",
+      "price": 3.99,
+      "stock": 27
+    }
+  ]
+}
