@@ -8,7 +8,7 @@ const Home = () => {
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedCategory, setSelectedCategory] = useState("All");
-    const itemsPerPage = 5;
+    const itemsPerPage = 6;
     const { user } = useAuth();
 
     const fetchData = async (page) => {
@@ -77,7 +77,7 @@ const Home = () => {
                 <Carousel.Item>
                     <div className="d-flex align-items-center carousel-custom-height" style={{ backgroundColor: '#fff' }}>
                         <div className="col-md-6">
-                            <img className="d-block w-100" src={isMobile ? './images/MikuPizza.jpg' : './images/Bocchi.jpg'} alt="Miku Pizza" />
+                            <img className="d-block w-100" src={isMobile ? './images/kekw.jpg' : './images/Bocchi.jpg'} alt="Miku Pizza" />
                         </div>
                         <div className="col-md-6 p-4">
                             <h2 className="fw-bold">OFFICIAL STATEMENT: We don't support gender equality</h2>
@@ -89,9 +89,34 @@ const Home = () => {
                     </div>
                 </Carousel.Item>
             </Carousel>
-
+            {/* Division Line */}
+            <div class="divline">
+                <div class="divlinein">
+                    <hr></hr>
+                </div>
+            </div>
+            {/* Order Part */}
+            <nav className="order">
+                <h3>HOW TO ORDER A MEAL</h3>
+            </nav>
+            {/* Cute Picture */}
+            <div className='row QR'>
+                <div className="col-sm-9 col-md-6 my-2 qrtext">
+                    <h2 className='fw-bold'>Scan QR code on your desk or order online</h2>
+                    <p className="text-muted">
+                        Scan QR so we could know where to order your order, or just log in to our website so we can deliver food to your doorstep.
+                    </p>
+                    <img id='QRCode' src='./images/frame.png' alt='qr code'></img>
+                    <p className="text-muted">
+                        Some products may only be purchased after age verification that requires signing in
+                    </p>
+                </div>
+                <div className="col-sm-3 col-md-6 text-end floatingmiku">
+                    <img src='./images/UnderwaterMiku.png' alt='WideCutePic' className='widepic'></img>
+                </div>
+            </div>
             {/* Category Filter Menu */}
-            <nav className="menunavbar my-3">
+            <nav className="menunavbar">
                 <ul className="d-flex list-unstyled gap-3 justify-content-center">
                     {['All', 'Main Course', 'Drinks', 'Special', 'Alcohol'].map(category => (
                         <li key={category}>
@@ -127,9 +152,9 @@ const Home = () => {
                 previousLabel={'<'}
                 nextLabel={'>'}
                 breakLabel={'...'}
-                pageCount={10}
+                pageCount={3}
                 marginPagesDisplayed={1}
-                pageRangeDisplayed={2}
+                pageRangeDisplayed={3}
                 onPageChange={handlePageClick}
                 containerClassName='pagination justify-content-center'
                 pageClassName='page-item'

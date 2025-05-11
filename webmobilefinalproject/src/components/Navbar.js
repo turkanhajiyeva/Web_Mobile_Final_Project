@@ -8,7 +8,7 @@ const Navbar = () => {
     <>
       <div class='intro'>
         <h1>IL'PALAZZO PIZZA</h1>
-        <p>Hannah Montana said nobody is perfect but here we are</p>
+        <p className="text-muted">Hannah Montana said nobody is perfect but here we are</p>
       </div>
       <nav className='navnobs'>
         <ul>

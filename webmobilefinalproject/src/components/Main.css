@@ -54,9 +54,10 @@
 }
 
 #NewsHeading{
-  color: #000000;
+  color: #333;
   padding-top: 20px;
   padding-left: 10px;
+  font-weight: 700;
 }
 
 .carousel-control-next-icon,
@@ -161,6 +162,49 @@
 
 .carousel-custom{
   width: 100%;
+}
+
+.divline{
+  width:100%;
+  height: 2px;
+  padding: 0% 10%;
+  margin-top: 35px!important;
+}
+.divlinein{
+  background-color: #5d5d5d;
+}
+.order {
+  text-align: right;
+  margin: 20px;
+  padding-right: 10px;
+  color: #333;
+}
+.qrtext{
+  padding: 1%;
+}
+#QRCode{
+  width: 200px;
+  height: 200px;
+}
+.order h3{
+   font-weight: 700;
+}
+.QR{
+  width: 100%;
+  height: 400px;
+  background: linear-gradient(to right, #f8fad0, #8afde3);;
+}
+
+.QR div{
+  height: 400px;
+  margin: 0px !important;
+}
+
+.floatingmiku{
+  padding-right: 0px!important;
+}
+.widepic{
+  height: 113.5%;
 }
 
 .menunavbar ul {
