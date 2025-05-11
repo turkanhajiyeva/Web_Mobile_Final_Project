@@ -55,7 +55,7 @@
 
 #NewsHeading{
   color: #000000;
-  padding-top: 40px;
+  padding-top: 20px;
   padding-left: 10px;
 }
 
@@ -158,8 +158,40 @@
     --bs-btn-disabled-bg: #eda9dc!important;
     --bs-btn-disabled-border-color: #eda9dc!important;
 }
+
 .carousel-custom{
-  width: 80%;
+  width: 100%;
+}
+
+.menunavbar ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #9895ff;
+}
+
+.menunavbar li {
+  float: left;
+  font-size: 20px;
+
+}
+
+.menunavbar li button {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.menunavbar li button:hover {
+  background-color: #a4a1f9;
+  color: white;
+}
+
+.row {
+  margin-left: 0px !important;
 }
 .products{
   width: 100%;
