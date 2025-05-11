@@ -1,6 +1,8 @@
 import ReactPaginate from 'react-paginate'
 import { Carousel } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
+import { useAuth } from "../context/AuthContext";
+
 
 const Home = () => {
 
@@ -8,7 +10,8 @@ const Home = () => {
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
-    
+    const { user } = useAuth();
+
     const fetchData = async (page) => {
     try {
         const res = await fetch(`http://localhost:3009/products?_page=${page}&_limit=${itemsPerPage}`);
@@ -36,6 +39,7 @@ const Home = () => {
 
   return (
     <>
+        
         <h3 id="NewsHeading" class=''>IL'PALAZZO PIZZERIA HOT NEWS:</h3>
 
         <Carousel class='carousel-custom'>
@@ -96,7 +100,7 @@ const Home = () => {
         </Carousel>
 
         {/* orders and stuff */}
-        <div className="row my-4">
+        <div className="row my-4 products">
             {items.map((item) => (
             <div className="col-sm-6 col-md-4 my-2" key={item.id}>
                 <div className="card shadow-sm w-100">

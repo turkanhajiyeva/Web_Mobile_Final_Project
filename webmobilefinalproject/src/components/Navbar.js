@@ -1,13 +1,16 @@
 import { Outlet, Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
+    const { user } = useAuth();
+    
   return (
     <>
       <div class='intro'>
         <h1>IL'PALAZZO PIZZA</h1>
         <p>Hannah Montana said nobody is perfect but here we are</p>
       </div>
-      <nav class='navnobs'>
+      <nav className='navnobs'>
         <ul>
           <li>
             <Link to="/">Home</Link>
@@ -18,8 +21,8 @@ const Navbar = () => {
           <li>
             <Link to="/details">Details</Link>
           </li>
-          <li>
-            
+          <li className="loginstuff">
+            <Link to="/login">Hello, {user ? user.username : "Please Log-In"}</Link>
           </li>
         </ul>
       </nav>

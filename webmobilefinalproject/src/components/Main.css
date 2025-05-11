@@ -25,6 +25,9 @@
   font-size: 20px;
 
 }
+.loginstuff{
+  float: right!important;
+}
 
 .navnobs li a {
   display: block;
@@ -40,6 +43,10 @@
 
 
 /*Home*/
+.welcome{
+  width: 100%;
+  align-items: center;
+}
 :root, [data-bs-theme=light] {
     --bs-carousel-indicator-active-bg: #8b8b8b!important;
     --bs-carousel-caption-color: #a7a7a7;
@@ -153,6 +160,9 @@
 }
 .carousel-custom{
   width: 80%;
+}
+.products{
+  width: 100%;
 }
 /*Details*/
 
