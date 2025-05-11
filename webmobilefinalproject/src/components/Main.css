@@ -1,5 +1,5 @@
 /*Navbar*/
-.nav ul {
+.navnobs ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -7,11 +7,11 @@
   background-color: #333;
 }
 
-.nav li {
+.navnobs li {
   float: left;
 }
 
-.nav li a {
+.navnobs li a {
   display: block;
   color: white;
   text-align: center;
@@ -19,13 +19,80 @@
   text-decoration: none;
 }
 
-.nav li a:hover {
+.navnobs li a:hover {
   background-color: #222;
 }
 
 
 /*Home*/
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+  gap: 8px;
+}
+.pagination a{
+  text-decoration: none;
+}
 
+.page-item {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.page-link {
+  padding: 8px 12px;
+  text-decoration: none;
+  color: #007bff;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.page-link:hover {
+  background-color: #f0f0f0;
+}
+
+.page-item.selected .page-link {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+}
+
+.page-item.disabled .page-link {
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+.next-link {
+  padding: 8px 12px;
+  text-decoration: none;
+  color: #007bff;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.next-link:hover {
+  background-color: #f0f0f0;
+}
+
+.previous-link {
+  padding: 8px 12px;
+  text-decoration: none;
+  color: #007bff;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.previous-link:hover {
+  background-color: #f0f0f0;
+}
 
 /*Details*/
 
