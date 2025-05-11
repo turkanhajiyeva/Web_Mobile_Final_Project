@@ -25,6 +25,11 @@
 
 
 /*Home*/
+.carousel-custom-height{
+  height: 300px;
+  object-fit: cover;
+}
+
 .pagination {
   display: flex;
   justify-content: center;
