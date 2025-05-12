@@ -1,3 +1,16 @@
+CREATE TABLE logininfo (
+    user_id CHAR(128) PRIMARY KEY, 
+    username VARCHAR(50) NOT NULL,
+    password VARCHAR(20) NOT NULL,
+    role VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE table_information (
+    table_id CHAR(36) PRIMARY KEY, 
+    table_name VARCHAR(50) NOT NULL,
+    qr_code_url VARCHAR(255)
+);
+
 CREATE TABLE orders (
     order_id INT PRIMARY KEY AUTO_INCREMENT,
     table_id CHAR(36) NOT NULL,
@@ -15,18 +28,10 @@ CREATE TABLE order_items (
     FOREIGN KEY (menu_item_id) REFERENCES menu_items(id)
 );
 
-INSERT INTO orders (table_id, total_amount, status)
-VALUES
-('a1b2c3d4-e5f6-7890-abcd-ef1234567890', 22.47, 'completed'),
-('a1b2c3d4-e5f6-7890-abcd-ef1234567890', 13.98, 'pending');
-
--- Order 1: 1x Pizza (id: 1), 2x Wings (id: 2)
-INSERT INTO order_items (order_id, menu_item_id, quantity)
-VALUES
-(1, 1, 1),
-(1, 2, 2);
-
--- Order 2: 2x Iced Tea (id: 3)
-INSERT INTO order_items (order_id, menu_item_id, quantity)
-VALUES
-(2, 3, 2);
+CREATE TABLE menu_items (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    price DECIMAL(4,2) NOT NULL,
+    category VARCHAR(50)
+);
