@@ -1,26 +1,13 @@
+-- Insert tables into table_information
 INSERT INTO table_information (table_id, table_name, qr_code_url)
 VALUES 
     ('d7b1a5d2-3c9c-4f2e-bf08-9a9d8f42b1b1', 'Table 1', ''),
     ('a3f7b8d5-c2b9-40b7-bcd5-f8f29a5f3f56', 'Table 2', ''),
     ('56f3e33e-ca89-468c-9ef9-df0a1fdea9ea','Table 3',''),
-    ('67078c88-802d-45d0-a091-29060e016299','Table 4','');
+    ('67078c88-802d-45d0-a091-29060e016299','Table 4','')
+ON CONFLICT (table_id) DO NOTHING;
 
-INSERT INTO orders (table_id, total_amount, status)
-VALUES
-('a1b2c3d4-e5f6-7890-abcd-ef1234567890', 22.47, 'completed'),
-('a1b2c3d4-e5f6-7890-abcd-ef1234567890', 13.98, 'pending');
-
--- Order 1: 1x Pizza (id: 1), 2x Wings (id: 2)
-INSERT INTO order_items (order_id, menu_item_id, quantity)
-VALUES
-(1, 1, 1),
-(1, 2, 2);
-
--- Order 2: 2x Iced Tea (id: 3)
-INSERT INTO order_items (order_id, menu_item_id, quantity)
-VALUES
-(2, 3, 2);
-
+-- Insert menu items
 INSERT INTO menu_items (name, description, price, category)
 VALUES
     -- Appetizers
@@ -61,13 +48,15 @@ VALUES
     ('Tarkhun Lemonade', 'Freshly squeezed lemonade with a hint of mint', 3.49, 'Drinks'),
     ('Berry Fizz Cocktail', 'A mix of fresh berries, sparkling water, and vodka', 4.99, 'Drinks'),
     ('Tarkhun Lemon Iced Tea', 'A refreshing blend of lemon and iced tea', 3.99, 'Drinks'),
-    ('Peach Bellini', 'Prosecco with peach puree for a sweet and bubbly treat', 5.99, 'Drinks');
+    ('Peach Bellini', 'Prosecco with peach puree for a sweet and bubbly treat', 5.99, 'Drinks')
+ON CONFLICT (id) DO NOTHING;
 
-
+-- Insert login information
 INSERT INTO logininfo (user_id, username, password, role)
 VALUES 
     ('127a597a-228f-4547-8ab3-e23b951237a6','a_r_i_z_o_na', 'passwordweb', 'Kitchen Staff'),
     ('e3c611d8-5bcb-438c-9ce0-61fb2d4acd87','lilithanchaos', 'passwordmobile', 'Manager'),
     ('41d6dd1d-2e65-4503-b3c2-910e13c6e345','ilpalazz0', 'passwordfinal', 'Kitchen Staff'),
     ('59180e0d-055d-42c0-9944-63ff24e4a3e3','crimsonV0', 'passwordproject', 'Waiter'),
-    ('495d1c38-86e7-4bd0-93e9-ebe735d58b22','SevereHedgehog', 'passwordcookie', 'Waiter');
+    ('495d1c38-86e7-4bd0-93e9-ebe735d58b22','SevereHedgehog', 'passwordcookie', 'Waiter')
+ON CONFLICT (user_id) DO NOTHING;

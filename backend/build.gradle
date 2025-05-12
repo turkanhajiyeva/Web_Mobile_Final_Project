@@ -21,8 +21,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'  // If using JPA (for PostgreSQL, etc.)
    // implementation 'org.springframework.boot:spring-boot-starter-data-mongodb' // MongoDB dependency
     implementation 'org.springframework.boot:spring-boot-starter-web' // For web functionality
-    runtimeOnly 'com.h2database:h2'  // For H2 database (remove if you're using MongoDB exclusively)
-    // runtimeOnly 'org.postgresql:postgresql'  // PostgreSQL if you're using it with JPA
+    // runtimeOnly 'com.h2database:h2'  // For H2 database (remove if you're using MongoDB exclusively)
+    runtimeOnly 'org.postgresql:postgresql' // PostgreSQL if you're using it with JPA
     testImplementation 'org.springframework.boot:spring-boot-starter-test' // For testing
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher' // For JUnit 5 testing
 }
