@@ -1,0 +1,4 @@
+// settings.gradle
+
+rootProject.name = 'Web_Mobile_Final_Project'
+include 'webmobilefinalproject', 'backend'
