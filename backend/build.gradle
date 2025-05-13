@@ -18,30 +18,27 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'  // For SQL database
-    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb' // For NoSQL database
-    implementation 'org.springframework.boot:spring-boot-starter-web' // For web functionality
-    implementation 'org.springframework.boot:spring-boot-starter-security' // For authentication
-    implementation 'io.jsonwebtoken:jjwt-api:0.11.5' // For JWT tokens
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
-    implementation 'org.springframework.boot:spring-boot-starter-validation' // For input validation
-    implementation 'org.springframework.kafka:spring-kafka' // For message queue
-    implementation 'org.springframework.boot:spring-boot-starter-websocket' // For real-time notifications
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis' // For Redis
-    implementation 'org.springframework.session:spring-session-data-redis' // For Redis session management
-    implementation 'com.google.zxing:core:3.5.1' // For QR code generation
-    implementation 'com.google.zxing:javase:3.5.1' // For QR code generation
-
-    runtimeOnly 'org.postgresql:postgresql' // PostgreSQL database
-
-    compileOnly 'org.projectlombok:lombok' // For reducing boilerplate code
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.kafka:spring-kafka'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.session:spring-session-data-redis'
+    implementation 'com.google.zxing:core:3.5.1'
+    implementation 'com.google.zxing:javase:3.5.1'
+    runtimeOnly 'org.postgresql:postgresql'
+    compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-
-    testImplementation 'org.springframework.boot:spring-boot-starter-test' // For testing
-    testImplementation 'org.springframework.security:spring-security-test' // For security testing
-    testImplementation 'org.springframework.kafka:spring-kafka-test' // For Kafka testing
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher' // For JUnit 5 testing
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.springframework.kafka:spring-kafka-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 configurations {
