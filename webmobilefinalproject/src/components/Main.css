@@ -164,15 +164,18 @@
   width: 100%;
 }
 
-.divline{
-  width:100%;
-  height: 2px;
-  padding: 0% 10%;
-  margin-top: 35px!important;
+.divline {
+    width: 100%;
+    height: 2px;
+    padding: 0% 10%;
+    margin: 17px 0px 15px 0px !important;
 }
-.divlinein{
-  background-color: #5d5d5d;
+
+.divlinein {
+    height: 2px;
+    background-color: #858585;
 }
+
 .order {
   text-align: right;
   margin: 20px;
@@ -212,7 +215,7 @@
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background-color: #9895ff;
+  background-color: #eda9dc;
 }
 
 .menunavbar li {

@@ -95,13 +95,12 @@ const Home = () => {
                     <hr></hr>
                 </div>
             </div>
-            {/* Order Part */}
-            <nav className="order">
-                <h3>HOW TO ORDER A MEAL</h3>
-            </nav>
+            
+            <div className="menudiv">
+            </div>
             {/* Cute Picture */}
             <div className='row QR'>
-                <div className="col-sm-9 col-md-6 my-2 qrtext">
+                <div className="col-sm-9 col-md-8 my-2 qrtext">
                     <h2 className='fw-bold'>Scan QR code on your desk or order online</h2>
                     <p className="text-muted">
                         Scan QR so we could know where to order your order, or just log in to our website so we can deliver food to your doorstep.
@@ -111,7 +110,7 @@ const Home = () => {
                         Some products may only be purchased after age verification that requires signing in
                     </p>
                 </div>
-                <div className="col-sm-3 col-md-6 text-end floatingmiku">
+                <div className="col-sm-3 col-md-4 text-end floatingmiku">
                     <img src='./images/UnderwaterMiku.png' alt='WideCutePic' className='widepic'></img>
                 </div>
             </div>
