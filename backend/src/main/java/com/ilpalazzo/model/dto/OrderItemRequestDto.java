@@ -1,15 +1,17 @@
 package com.ilpalazzo.model.dto;
 
+import java.util.UUID;
+
 public class OrderItemRequestDto {
 
-    private Long menuItemId;
+    private UUID menuItemId;
     private int quantity;
 
-    public Long getMenuItemId() {
+    public UUID getMenuItemId() {
         return menuItemId;
     }
 
-    public void setMenuItemId(Long menuItemId) {
+    public void setMenuItemId(UUID menuItemId) {
         this.menuItemId = menuItemId;
     }
 
@@ -21,5 +23,3 @@ public class OrderItemRequestDto {
         this.quantity = quantity;
     }
 }
-
-

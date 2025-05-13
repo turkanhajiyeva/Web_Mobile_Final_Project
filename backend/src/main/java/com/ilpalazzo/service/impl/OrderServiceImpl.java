@@ -11,6 +11,13 @@ import java.util.List;
 @Service
 public class OrderServiceImpl implements OrderService {
 
+<<<<<<< HEAD
+=======
+    private static final Logger log = LoggerFactory.getLogger(OrderServiceImpl.class);
+
+    private final OrderRepository orderRepository;
+
+>>>>>>> 5fe42afdefeac7a96016c14c99c3c15ff5d1a822
     @Autowired
     private OrderRepository orderRepository;
 
@@ -20,6 +27,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+<<<<<<< HEAD
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
     }
@@ -28,6 +36,45 @@ public class OrderServiceImpl implements OrderService {
     public Order getOrderById(Long id) {
         return orderRepository.findById(id)
                 .orElseThrow(() -> new OrderNotFoundException(id));
+=======
+    public OrderResponseDto createOrder(OrderRequestDto dto) {
+        Order order = OrderMapper.toEntity(dto);
+        Order savedOrder = orderRepository.save(order);
+        return OrderMapper.toResponse(savedOrder);
+    }
+
+    @Override
+    public List<OrderResponseDto> getAllOrders() {
+        return orderRepository.findAll()
+                .stream()
+                .map(OrderMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public OrderResponseDto getOrderById(Long id) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new OrderNotFoundException(id));
+        return OrderMapper.toResponse(order);
+    }
+
+    @Override
+    public OrderResponseDto updateOrder(Long id, OrderRequestDto dto) {
+        log.info("Updating order with ID {} using data: {}", id, dto);
+
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new OrderNotFoundException(id));
+
+        order.setTableId(dto.getTableId());
+        order.setTotalAmount(dto.getTotalAmount());
+        order.setItems(OrderMapper.mapOrderItems(dto.getItems(), order)); // re-map items
+
+        Order updatedOrder = orderRepository.save(order);
+
+        log.info("Order updated and saved: {}", updatedOrder);
+
+        return OrderMapper.toResponse(updatedOrder);
+>>>>>>> 5fe42afdefeac7a96016c14c99c3c15ff5d1a822
     }
 
     @Override
