@@ -1,32 +1,19 @@
 package com.ilpalazzo.service;
 
-import com.ilpalazzo.model.entity.Order;
-import com.ilpalazzo.repository.OrderRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.ilpalazzo.model.dto.OrderRequestDto;
+import com.ilpalazzo.model.dto.OrderResponseDto;
 
 import java.util.List;
 
-@Service
-public class OrderService {
+public interface OrderService {
 
-    @Autowired
-    private OrderRepository orderRepository;
+    OrderResponseDto createOrder(OrderRequestDto orderRequestDto);
 
-    public Order placeOrder(Order order) {
-        return orderRepository.save(order);
-    }
+    List<OrderResponseDto> getAllOrders();
 
-    public List<Order> getAllOrders() {
-        return orderRepository.findAll();
-    }
+    OrderResponseDto getOrderById(Long id);
 
-    public Order getOrderById(Long id) {
-        return orderRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Order not found with ID " + id));
-    }
+    OrderResponseDto updateOrder(Long id, OrderRequestDto orderRequestDto);
 
-    public void deleteOrder(Long id) {
-        orderRepository.deleteById(id);
-    }
+    void deleteOrder(Long id);
 }

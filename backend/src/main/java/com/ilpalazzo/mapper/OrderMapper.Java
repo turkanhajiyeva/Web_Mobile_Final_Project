@@ -10,24 +10,44 @@ public class OrderMapper {
 
     public static Order toEntity(OrderRequestDto dto) {
         Order order = new Order();
+
         order.setTableId(dto.getTableId());
         order.setTotalAmount(dto.getTotalAmount());
 
         if (dto.getItems() != null) {
-            List<OrderItem> items = dto.getItems().stream()
-                    .map(OrderMapper::toEntity)
+            List<OrderItem> orderItems = dto.getItems().stream()
+                    .map(itemDto -> toEntity(itemDto, order))
                     .collect(Collectors.toList());
-            order.setItems(items);
+            order.setOrderItems(orderItems);
         }
 
         return order;
     }
 
     public static OrderItem toEntity(OrderItemRequestDto dto) {
-        OrderItem item = new OrderItem();
-        item.setMenuItemId(dto.getMenuItemId());
-        item.setQuantity(dto.getQuantity());
-        return item;
+        OrderItem orderItem = new OrderItem();
+
+        MenuItem menuItem = new MenuItem();
+        menuItem.setId(dto.getMenuItemId());
+        orderItem.setMenuItem(menuItem);
+
+        orderItem.setQuantity(dto.getQuantity());
+        return orderItem;
+    }
+
+    public static OrderItem toEntity(OrderItemRequestDto dto, Order order) {
+        OrderItem orderItem = toEntity(dto);
+        orderItem.setOrder(order);
+        return orderItem;
+    }
+
+    public static List<OrderItem> mapOrderItems(List<OrderItemRequestDto> itemsDto, Order order) {
+        if (itemsDto == null) {
+            return null;
+        }
+        return itemsDto.stream()
+                .map(dto -> toEntity(dto, order))
+                .collect(Collectors.toList());
     }
 
     public static OrderResponseDto toResponse(Order order) {
@@ -38,8 +58,8 @@ public class OrderMapper {
         dto.setStatus(order.getStatus());
         dto.setTotalAmount(order.getTotalAmount());
 
-        if (order.getItems() != null) {
-            List<OrderItemResponseDto> items = order.getItems().stream()
+        if (order.getOrderItems() != null) {
+            List<OrderItemResponseDto> items = order.getOrderItems().stream()
                     .map(OrderMapper::toResponse)
                     .collect(Collectors.toList());
             dto.setItems(items);
@@ -48,11 +68,11 @@ public class OrderMapper {
         return dto;
     }
 
-    public static OrderItemResponseDto toResponse(OrderItem item) {
+    public static OrderItemResponseDto toResponse(OrderItem orderItem) {
         OrderItemResponseDto dto = new OrderItemResponseDto();
-        dto.setOrderItemId(item.getOrderItemId());
-        dto.setMenuItemId(item.getMenuItemId());
-        dto.setQuantity(item.getQuantity());
+        dto.setOrderItemId(orderItem.getOrderItemId());
+        dto.setMenuItemId(orderItem.getMenuItem() != null ? orderItem.getMenuItem().getId() : null);
+        dto.setQuantity(orderItem.getQuantity());
         return dto;
     }
 }
