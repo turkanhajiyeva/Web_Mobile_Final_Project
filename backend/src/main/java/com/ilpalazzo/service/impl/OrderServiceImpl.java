@@ -4,6 +4,8 @@ import com.ilpalazzo.errors.OrderNotFoundException;
 import com.ilpalazzo.model.entity.Order;
 import com.ilpalazzo.repository.OrderRepository;
 import com.ilpalazzo.service.OrderService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,8 @@ import java.util.List;
 
 @Service
 public class OrderServiceImpl implements OrderService {
+
+    private static final Logger log = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     @Autowired
     private OrderRepository orderRepository;
@@ -42,8 +46,20 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order updateOrderStatus(Long orderId, String newStatus) {
         Order order = orderRepository.findById(orderId)
-            .orElseThrow(() -> new RuntimeException("Order not found"));
+            .orElseThrow(() -> new OrderNotFoundException(orderId));
+
+        String currentStatus = order.getStatus();
         order.setStatus(newStatus);
-        return orderRepository.save(order);
+        Order updatedOrder = orderRepository.save(order);
+
+        if ("ready".equalsIgnoreCase(newStatus) && !"ready".equalsIgnoreCase(currentStatus)) {
+            log.info("Notify waiter: Order #{} is ready for delivery.", orderId);
+        }
+
+        if ("delivered".equalsIgnoreCase(newStatus) && !"delivered".equalsIgnoreCase(currentStatus)) {
+            log.info("Order #{} has been marked as delivered by a waiter.", orderId);
+        }
+
+        return updatedOrder;
     }
 }
