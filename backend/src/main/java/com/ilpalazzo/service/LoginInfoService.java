@@ -1,5 +1,13 @@
 package com.ilpalazzo.service;
 
-public class LoginInfoService {
-    
+import java.util.List;
+
+import com.ilpalazzo.model.entity.LoginInfo;
+
+public interface LoginInfoService {
+    LoginInfo createLoginInfo(LoginInfo loginInfo);
+    List<LoginInfo> getAllLoginInfos();
+    LoginInfo getLoginInfoById(String userId);
+    void deleteLoginInfo(String userId);
+    LoginInfo updateLoginInfo(String userId, LoginInfo updatedLoginInfo);
 }
