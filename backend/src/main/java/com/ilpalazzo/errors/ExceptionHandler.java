@@ -11,8 +11,8 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class ExceptionHandler {
- 
-  @org.springframework.web.bind.annotation.ExceptionHandler(OrderNotFoundException.class)
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(OrderNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleOrderNotFoundException(
             OrderNotFoundException ex, HttpServletRequest request) {
 
@@ -27,4 +27,18 @@ public class ExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
+    @org.springframework.web.bind.annotation.ExceptionHandler(LoginInfoNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleLoginInfoNotFoundException(
+            LoginInfoNotFoundException ex, HttpServletRequest request) {
+
+        Map<String, Object> errorResponse = new HashMap<>();
+
+        errorResponse.put("timestamp", LocalDateTime.now());
+        errorResponse.put("statusCode", HttpStatus.NOT_FOUND.value());
+        errorResponse.put("statusText", "Not Found");
+        errorResponse.put("message", ex.getMessage());
+        errorResponse.put("path", request.getRequestURI());
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
 }

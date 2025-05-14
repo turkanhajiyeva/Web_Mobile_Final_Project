@@ -33,8 +33,6 @@ public class Order {
     @JsonManagedReference
     private List<OrderItem> items;
 
-    // Getters and Setters
-
     public Long getOrderId() {
         return orderId;
     }

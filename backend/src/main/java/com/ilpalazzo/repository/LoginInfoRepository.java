@@ -1,5 +1,9 @@
 package com.ilpalazzo.repository;
 
-public class LoginInfoRepository {
-    
+import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
+import com.ilpalazzo.model.entity.LoginInfo;
+
+public interface LoginInfoRepository extends JpaRepository<LoginInfo, String> {
+    Optional<LoginInfo> findByUsername(String username);
 }
