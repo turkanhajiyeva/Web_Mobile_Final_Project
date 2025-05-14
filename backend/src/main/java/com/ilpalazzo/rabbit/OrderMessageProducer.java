@@ -1,20 +1,27 @@
 package com.ilpalazzo.rabbit;
 
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import com.ilpalazzo.model.entity.Order;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-@Component
+@Service
 public class OrderMessageProducer {
 
-    private final RabbitTemplate rabbitTemplate;
-
     @Autowired
-    public OrderMessageProducer(RabbitTemplate rabbitTemplate) {
-        this.rabbitTemplate = rabbitTemplate;
-    }
+    private AmqpTemplate amqpTemplate;
 
-    public void sendOrder(String message) {
-        rabbitTemplate.convertAndSend(RabbitMQConfig.ORDER_EXCHANGE, RabbitMQConfig.ORDER_ROUTING_KEY, message);
+    private static final String EXCHANGE_NAME = "order-exchange";
+    private static final String ROUTING_KEY = "order.routing.key";
+
+    public void sendOrder(Order order) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            String orderJson = objectMapper.writeValueAsString(order); 
+            amqpTemplate.convertAndSend(EXCHANGE_NAME, ROUTING_KEY, orderJson); 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

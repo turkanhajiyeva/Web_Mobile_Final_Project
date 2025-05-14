@@ -5,7 +5,7 @@ import java.util.UUID;
 public class OrderItemResponseDto {
 
     private Long orderItemId;
-    private UUID menuItemId;
+    private int menuItemId;
     private int quantity;
 
     public Long getOrderItemId() {
@@ -16,11 +16,11 @@ public class OrderItemResponseDto {
         this.orderItemId = orderItemId;
     }
 
-    public UUID getMenuItemId() {
+    public int getMenuItemId() {
         return menuItemId;
     }
 
-    public void setMenuItemId(UUID menuItemId) {
+    public void setMenuItemId(int menuItemId) {
         this.menuItemId = menuItemId;
     }
 

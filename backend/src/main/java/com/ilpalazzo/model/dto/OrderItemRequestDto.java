@@ -4,14 +4,14 @@ import java.util.UUID;
 
 public class OrderItemRequestDto {
 
-    private UUID menuItemId;
+    private int menuItemId;
     private int quantity;
 
-    public UUID getMenuItemId() {
+    public int getMenuItemId() {
         return menuItemId;
     }
 
-    public void setMenuItemId(UUID menuItemId) {
+    public void setMenuItemId(int menuItemId) {
         this.menuItemId = menuItemId;
     }
 
