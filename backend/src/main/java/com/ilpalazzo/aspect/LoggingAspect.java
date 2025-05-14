@@ -14,6 +14,9 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class LoggingAspect {
 
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(LoggingAspect.class); //for disabling red line under log (it annoyed me)
+
+
     @Before("execution(* com.ilpalazzo.controller.OrderController.*(..))")
     public void doLogBefore(JoinPoint joinPoint) {
         log.info("ActionLog: {}.{} method call started.",
