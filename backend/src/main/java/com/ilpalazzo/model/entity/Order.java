@@ -1,6 +1,8 @@
 package com.ilpalazzo.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,7 +30,10 @@ public class Order {
     private String status = "pending";
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<OrderItem> items;
+
+    // Getters and Setters
 
     public Long getOrderId() {
         return orderId;
@@ -82,5 +87,4 @@ public class Order {
             }
         }
     }
-
 }

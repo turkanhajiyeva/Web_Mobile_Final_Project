@@ -1,7 +1,7 @@
 package com.ilpalazzo.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import java.util.UUID;
 
 @Entity
 @Table(name = "order_items")
@@ -14,15 +14,17 @@ public class OrderItem {
 
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
+    @JsonBackReference
     private Order order;
 
     @Column(name = "menu_item_id", nullable = false)
-    private UUID menuItemId;
+    private int menuItemId;
 
     @Column(nullable = false)
     private int quantity;
 
     // Getters and Setters
+
     public Long getOrderItemId() {
         return orderItemId;
     }
@@ -39,11 +41,11 @@ public class OrderItem {
         this.order = order;
     }
 
-    public UUID getMenuItemId() {
+    public int getMenuItemId() {
         return menuItemId;
     }
 
-    public void setMenuItemId(UUID menuItemId) {
+    public void setMenuItemId(int menuItemId) {
         this.menuItemId = menuItemId;
     }
 

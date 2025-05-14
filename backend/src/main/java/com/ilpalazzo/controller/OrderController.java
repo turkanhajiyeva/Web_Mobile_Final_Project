@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.ilpalazzo.rabbit.OrderMessageProducer;
+import com.ilpalazzo.repository.OrderRepository;
+import java.util.Map;
+
 
 import java.util.List;
 
@@ -19,9 +22,12 @@ public class OrderController {
     @Autowired
     private OrderMessageProducer orderMessageProducer;
 
+    @Autowired
+    private OrderRepository orderRepository;
+
     @PostMapping
     public ResponseEntity<String> placeOrder(@RequestBody Order order) {
-        orderMessageProducer.sendOrder(order.toString()); // send to queue
+        orderMessageProducer.sendOrder(order); // send the order object to the queue
         return ResponseEntity.accepted().body("Order is being processed asynchronously.");
     }
 
@@ -40,10 +46,18 @@ public class OrderController {
         orderService.deleteOrder(id);
         return ResponseEntity.noContent().build();
     }
-
+    
     @PutMapping("/{id}/status")
-    public ResponseEntity<Order> updateOrderStatus(@PathVariable Long id, @RequestBody String newStatus) {
-        return ResponseEntity.ok(orderService.updateOrderStatus(id, newStatus));
+    public ResponseEntity<Order> updateOrderStatus(
+        @PathVariable Long id,
+        @RequestBody Map<String, String> body) {
+
+        String newStatus = body.get("status");
+        Order order = orderRepository.findById(id).orElseThrow();
+        order.setStatus(newStatus);
+        orderRepository.save(order);
+
+        return ResponseEntity.ok(order);
     }
 
 }

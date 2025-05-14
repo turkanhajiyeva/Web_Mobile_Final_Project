@@ -60,3 +60,13 @@ VALUES
     ('59180e0d-055d-42c0-9944-63ff24e4a3e3','crimsonV0', 'passwordproject', 'Waiter'),
     ('495d1c38-86e7-4bd0-93e9-ebe735d58b22','SevereHedgehog', 'passwordcookie', 'Waiter')
 ON CONFLICT (user_id) DO NOTHING;
+
+INSERT INTO orders (order_id, table_id, total_amount, status)
+VALUES (1, 'd7b1a5d2-3c9c-4f2e-bf08-9a9d8f42b1b1', 21.98, 'pending')
+ON CONFLICT (order_id) DO NOTHING;
+
+
+INSERT INTO order_items (order_item_id, order_id, menu_item_id, quantity)
+VALUES 
+    (1, 1, 1, 2) 
+ON CONFLICT (order_item_id) DO NOTHING;
