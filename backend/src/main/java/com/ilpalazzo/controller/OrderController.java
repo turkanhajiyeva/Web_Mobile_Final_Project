@@ -5,6 +5,7 @@ import com.ilpalazzo.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.ilpalazzo.rabbit.OrderMessageProducer;
 
 import java.util.List;
 
@@ -15,9 +16,13 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private OrderMessageProducer orderMessageProducer;
+
     @PostMapping
-    public ResponseEntity<Order> placeOrder(@RequestBody Order order) {
-        return ResponseEntity.ok(orderService.placeOrder(order));
+    public ResponseEntity<String> placeOrder(@RequestBody Order order) {
+        orderMessageProducer.sendOrder(order.toString()); // send to queue
+        return ResponseEntity.accepted().body("Order is being processed asynchronously.");
     }
 
     @GetMapping
@@ -35,7 +40,7 @@ public class OrderController {
         orderService.deleteOrder(id);
         return ResponseEntity.noContent().build();
     }
-    
+
     @PutMapping("/{id}/status")
     public ResponseEntity<Order> updateOrderStatus(@PathVariable Long id, @RequestBody String newStatus) {
         return ResponseEntity.ok(orderService.updateOrderStatus(id, newStatus));
