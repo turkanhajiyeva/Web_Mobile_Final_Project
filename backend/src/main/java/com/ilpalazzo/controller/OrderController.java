@@ -60,4 +60,10 @@ public class OrderController {
         return ResponseEntity.ok(order);
     }
 
+    @GetMapping("/{id}/status/{status}")
+    public ResponseEntity<List<Order>> getOrdersByStatus(@PathVariable String status) {
+    List<Order> orders = orderRepository.findByStatus(status);
+    return ResponseEntity.ok(orders);
+    }
+
 }
