@@ -17,7 +17,6 @@ public class ExceptionHandler {
             OrderNotFoundException ex, HttpServletRequest request) {
 
         Map<String, Object> errorResponse = new HashMap<>();
-
         errorResponse.put("timestamp", LocalDateTime.now());
         errorResponse.put("statusCode", HttpStatus.NOT_FOUND.value());
         errorResponse.put("statusText", "Not Found");
@@ -32,7 +31,20 @@ public class ExceptionHandler {
             LoginInfoNotFoundException ex, HttpServletRequest request) {
 
         Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("timestamp", LocalDateTime.now());
+        errorResponse.put("statusCode", HttpStatus.NOT_FOUND.value());
+        errorResponse.put("statusText", "Not Found");
+        errorResponse.put("message", ex.getMessage());
+        errorResponse.put("path", request.getRequestURI());
 
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(MenuItemNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleMenuItemNotFoundException(
+            MenuItemNotFoundException ex, HttpServletRequest request) {
+
+        Map<String, Object> errorResponse = new HashMap<>();
         errorResponse.put("timestamp", LocalDateTime.now());
         errorResponse.put("statusCode", HttpStatus.NOT_FOUND.value());
         errorResponse.put("statusText", "Not Found");

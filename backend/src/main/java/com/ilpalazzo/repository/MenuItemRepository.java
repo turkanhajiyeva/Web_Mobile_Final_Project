@@ -1,5 +1,13 @@
 package com.ilpalazzo.repository;
 
-public class MenuItemRepository {
-    
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.ilpalazzo.model.entity.MenuItem;
+
+public interface MenuItemRepository extends JpaRepository<MenuItem, Long> {
+    Optional<MenuItem> findByName(String name);
+    List<MenuItem> findByCategory(String category);
 }
