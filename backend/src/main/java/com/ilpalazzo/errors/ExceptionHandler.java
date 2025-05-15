@@ -53,4 +53,18 @@ public class ExceptionHandler {
 
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler(TableInformationNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleTableInformationNotFoundException(
+            TableInformationNotFoundException ex, HttpServletRequest request) {
+
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("timestamp", LocalDateTime.now());
+        errorResponse.put("statusCode", HttpStatus.NOT_FOUND.value());
+        errorResponse.put("statusText", "Not Found");
+        errorResponse.put("message", ex.getMessage());
+        errorResponse.put("path", request.getRequestURI());
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
 }
