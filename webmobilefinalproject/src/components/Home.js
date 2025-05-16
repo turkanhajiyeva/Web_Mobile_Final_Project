@@ -1,46 +1,66 @@
 import ReactPaginate from 'react-paginate';
-import { Carousel } from 'react-bootstrap';
+import { Carousel,Dropdown } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import { useAuth } from "../context/AuthContext";
 
 const Home = () => {
-    const [items, setItems] = useState([]);
-    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [selectedCategory, setSelectedCategory] = useState("All");
-    const itemsPerPage = 6;
-    const { user } = useAuth();
+  const [items, setItems] = useState([]);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const itemsPerPage = 12;
+  const { user } = useAuth();
 
-    const fetchData = async (category) => {
-        try {
-            const categoryPath = category === 'All' ? '' : encodeURIComponent(category);
-            const url = categoryPath 
-                ? `http://localhost:8080/api/menuitems/category/${categoryPath}` 
-                : 'http://localhost:8080/api/menuitems';  // no trailing slash
-            const res = await fetch(url);
-            const data = await res.json();
-            setItems(data);
-            setCurrentPage(0); // reset page when category changes
-        } catch (err) {
-            console.error('Failed to fetch products:', err);
-        }
-    };
+  // Cart state inside Home
+  const [cartItems, setCartItems] = useState([]);
 
-    useEffect(() => {
-        fetchData(selectedCategory);
-        const handleResize = () => setIsMobile(window.innerWidth < 768);
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, [selectedCategory]);
+  const addToCart = (item) => {
+    setCartItems(prevItems => {
+      const existing = prevItems.find(i => i.id === item.id);
+      if (existing) {
+        return prevItems.map(i =>
+          i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+        );
+      }
+      return [...prevItems, { ...item, quantity: 1 }];
+    });
+  };
 
-    const handlePageClick = (data) => {
-        setCurrentPage(data.selected);
-    };
+  const removeFromCart = (id) => {
+    setCartItems(prevItems => prevItems.filter(i => i.id !== id));
+  };
 
-    // Calculate items to show on current page (client-side pagination)
-    const offset = currentPage * itemsPerPage;
-    const currentItems = items.slice(offset, offset + itemsPerPage);
-    const pageCount = Math.ceil(items.length / itemsPerPage);
+  const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+  const fetchData = async (category) => {
+    try {
+      const categoryPath = category === 'All' ? '' : encodeURIComponent(category);
+      const url = categoryPath 
+          ? `http://localhost:8080/api/menuitems/category/${categoryPath}` 
+          : 'http://localhost:8080/api/menuitems';
+      const res = await fetch(url);
+      const data = await res.json();
+      setItems(data);
+      setCurrentPage(0); // reset page when category changes
+    } catch (err) {
+      console.error('Failed to fetch products:', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchData(selectedCategory);
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [selectedCategory]);
+
+  const handlePageClick = (data) => {
+    setCurrentPage(data.selected);
+  };
+
+  const offset = currentPage * itemsPerPage;
+  const currentItems = items.slice(offset, offset + itemsPerPage);
+  const pageCount = Math.ceil(items.length / itemsPerPage);
 
     return (
         <>
@@ -134,6 +154,32 @@ const Home = () => {
                     ))}
                 </ul>
             </nav>
+            {/* Cart */}
+
+            <Dropdown>
+            <Dropdown.Toggle variant="primary" id="dropdown-basic">
+                My Cart: ${totalPrice.toFixed(2)}
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+                {cartItems.length === 0 && <Dropdown.ItemText>Your cart is empty.</Dropdown.ItemText>}
+                {cartItems.map(item => (
+                <Dropdown.Item key={item.id} as="div" className="d-flex justify-content-between align-items-center">
+                    <div>
+                    <strong>{item.name}</strong><br />
+                    Qty: {item.quantity}<br />
+                    Price: ${(item.price * item.quantity).toFixed(2)}
+                    </div>
+                    <button
+                    className="btn btn-sm btn-danger"
+                    onClick={() => removeFromCart(item.id)}
+                    >
+                    Remove
+                    </button>
+                </Dropdown.Item>
+                ))}
+            </Dropdown.Menu>
+            </Dropdown>
 
             {/* Display paginated items */}
             <div className="container my-4">
@@ -153,7 +199,7 @@ const Home = () => {
                                     <p className="card-text">{item.description}</p>
                                     <div className="mt-auto">
                                         <p className="fw-bold">${item.price.toFixed(2)}</p>
-                                        <button className="btn btn-primary w-100">Add to Cart</button>
+                                        <button className="btn btn-miku w-100" onClick={() => addToCart(item)}>Add to Cart</button>
                                     </div>
                                 </div>
                             </div>

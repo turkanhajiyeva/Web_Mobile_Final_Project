@@ -15,24 +15,39 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const endpoint = isRegistering ? "register" : "login";
 
-    const res = await fetch(`http://localhost:8080/api/auth/${endpoint}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
+    const endpoint = isRegistering
+      ? "http://localhost:8080/api/logininfo"
+      : "http://localhost:8080/api/logininfo/authenticate";
 
-    const text = await res.text();
-    setMessage(text);
+    try {
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
 
-    if (text.toLowerCase().includes("successful")) {
+      if (!res.ok) {
+        setMessage("Authentication failed.");
+        return;
+      }
+
+      const data = await res.json();
+      setMessage(
+        isRegistering
+          ? "Registration successful. Please log in."
+          : `Login successful. Welcome ${data.username}!`
+      );
+
       if (!isRegistering) {
-        login({ username: form.username });
+        login({ username: data.username });
         navigate("/");
       } else {
-        setIsRegistering(false); // Switch to login view after registration
+        setIsRegistering(false);
       }
+    } catch (error) {
+      console.error("Error:", error);
+      setMessage("Server error.");
     }
   };
 
