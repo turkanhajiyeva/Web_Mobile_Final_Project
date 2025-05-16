@@ -3,9 +3,9 @@ package com.ilpalazzo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.restaurant.service.AuthService;
-import com.restaurant.dto.LoginRequest;
-import com.restaurant.dto.LoginResponse;
+import com.ilpalazzo.service.AuthService;
+import com.ilpalazzo.dto.LoginRequest;
+import com.ilpalazzo.dto.LoginResponse;
 
 @RestController
 @RequestMapping("/api/auth")

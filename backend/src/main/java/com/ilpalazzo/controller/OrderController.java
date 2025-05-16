@@ -3,10 +3,10 @@ package com.ilpalazzo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.restaurant.service.OrderService;
-import com.restaurant.model.Order;
-import com.restaurant.dto.OrderRequest;
-import com.restaurant.dto.OrderStatusUpdate;
+import com.ilpalazzo.service.OrderService;
+import com.ilpalazzo.model.entity.Order;
+import com.ilpalazzo.dto.OrderRequest;
+import com.ilpalazzo.dto.OrderStatusUpdate;
 
 @RestController
 @RequestMapping("/api/orders")
