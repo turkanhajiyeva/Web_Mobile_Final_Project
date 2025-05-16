@@ -9,6 +9,7 @@ public interface MenuItemService {
     MenuItemResponseDto createMenuItem(MenuItemRequestDto dto);
     List<MenuItemResponseDto> getAllMenuItems();
     MenuItemResponseDto getMenuItemById(Long id);
+    List<MenuItemResponseDto> getMenuItemByCategory(String category); 
     MenuItemResponseDto updateMenuItem(Long id, MenuItemRequestDto dto);
     void deleteMenuItem(Long id);
 }

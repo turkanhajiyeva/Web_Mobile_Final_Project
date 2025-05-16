@@ -41,6 +41,17 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
+    public List<MenuItemResponseDto> getMenuItemByCategory(String category) {
+        List<MenuItem> items = menuItemRepository.findByCategory(category);
+        if (items.isEmpty()) {
+            throw new MenuItemNotFoundException(category);
+        }
+        return items.stream()
+                .map(MenuItemMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public MenuItemResponseDto updateMenuItem(Long id, MenuItemRequestDto dto) {
         MenuItem existing = menuItemRepository.findById(id)
                 .orElseThrow(() -> new MenuItemNotFoundException(id));

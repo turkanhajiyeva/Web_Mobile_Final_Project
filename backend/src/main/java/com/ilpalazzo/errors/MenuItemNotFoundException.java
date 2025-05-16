@@ -7,8 +7,12 @@ public class MenuItemNotFoundException extends RuntimeException {
     public MenuItemNotFoundException(Long id) {
         super("MenuItem not found with id: " + id);
     }
+    
+    public MenuItemNotFoundException(String category) {
+        super("MenuItem not found with category: " + category);
+    }
 
-    public MenuItemNotFoundException(String message) {
+    public MenuItemNotFoundException(String message, boolean isCustomMessage) {
         super(message);
     }
 }

@@ -35,6 +35,12 @@ public class MenuItemController {
         return ResponseEntity.ok(item);
     }
 
+    @GetMapping("/category/{category}")
+    public ResponseEntity<List<MenuItemResponseDto>> getMenuItemsByCategory(@PathVariable String category) {
+        List<MenuItemResponseDto> items = menuItemService.getMenuItemByCategory(category);
+        return ResponseEntity.ok(items);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMenuItem(@PathVariable Long id) {
         menuItemService.deleteMenuItem(id);
