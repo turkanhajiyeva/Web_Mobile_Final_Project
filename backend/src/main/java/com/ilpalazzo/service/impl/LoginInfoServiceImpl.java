@@ -34,6 +34,11 @@ public class LoginInfoServiceImpl implements LoginInfoService {
         return loginInfoRepository.findById(userId)
                 .orElseThrow(() -> new LoginInfoNotFoundException(userId));
     }
+    
+    @Override
+    public LoginInfo getLoginInfoByUsernameandPassw(String username, String password) {
+        return loginInfoRepository.findByUsernameAndPassword(username, password);
+    }
 
     @Override
     public void deleteLoginInfo(String userId) {

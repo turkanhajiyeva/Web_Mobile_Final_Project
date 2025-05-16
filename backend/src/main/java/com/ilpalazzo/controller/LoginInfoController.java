@@ -38,6 +38,18 @@ public class LoginInfoController {
         return ResponseEntity.ok(loginInfo);
     }
 
+    @PostMapping("/authenticate")
+    public ResponseEntity<LoginInfo> authenticate(@RequestBody LoginInfo loginRequest) {
+        LoginInfo loginInfo = loginInfoService.getLoginInfoByUsernameandPassw(
+            loginRequest.getUsername(), loginRequest.getPassword());
+
+        if (loginInfo != null) {
+            return ResponseEntity.ok(loginInfo);
+        } else {
+            return ResponseEntity.status(401).build(); // Unauthorized
+        }
+    }
+
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteLoginInfo(@PathVariable String userId) {
         loginInfoService.deleteLoginInfo(userId);

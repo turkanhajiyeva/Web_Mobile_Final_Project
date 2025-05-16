@@ -11,31 +11,36 @@ const Home = () => {
     const itemsPerPage = 6;
     const { user } = useAuth();
 
-    const fetchData = async (page) => {
+    const fetchData = async (category) => {
         try {
-            const res = await fetch(`http://localhost:3009/products?_page=${page}&_limit=${itemsPerPage}`);
+            const categoryPath = category === 'All' ? '' : encodeURIComponent(category);
+            const url = categoryPath 
+                ? `http://localhost:8080/api/menuitems/category/${categoryPath}` 
+                : 'http://localhost:8080/api/menuitems';  // no trailing slash
+            const res = await fetch(url);
             const data = await res.json();
             setItems(data);
+            setCurrentPage(0); // reset page when category changes
         } catch (err) {
             console.error('Failed to fetch products:', err);
         }
     };
 
     useEffect(() => {
-        fetchData(currentPage);
+        fetchData(selectedCategory);
         const handleResize = () => setIsMobile(window.innerWidth < 768);
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
-    }, [currentPage]);
+    }, [selectedCategory]);
 
     const handlePageClick = (data) => {
-        const selectedPage = data.selected + 1;
-        setCurrentPage(selectedPage);
+        setCurrentPage(data.selected);
     };
 
-    const filteredItems = selectedCategory === 'All'
-        ? items
-        : items.filter(item => item.category === selectedCategory);
+    // Calculate items to show on current page (client-side pagination)
+    const offset = currentPage * itemsPerPage;
+    const currentItems = items.slice(offset, offset + itemsPerPage);
+    const pageCount = Math.ceil(items.length / itemsPerPage);
 
     return (
         <>
@@ -117,7 +122,7 @@ const Home = () => {
             {/* Category Filter Menu */}
             <nav className="menunavbar">
                 <ul className="d-flex list-unstyled gap-3 justify-content-center">
-                    {['All', 'Main Course', 'Drinks', 'Special', 'Alcohol'].map(category => (
+                    {['All', 'Main Courses', 'Drinks', 'Appetizers'].map(category => (
                         <li key={category}>
                             <button
                                 onClick={() => setSelectedCategory(category)}
@@ -130,28 +135,38 @@ const Home = () => {
                 </ul>
             </nav>
 
-            {/* Filtered Products */}
-            <div className="row my-4 products">
-                {filteredItems.map((item) => (
-                    <div className="col-sm-12 col-md-6 my-2" key={item.id}>
-                        <div className="card shadow-sm w-100">
-                            <img src={item.image} className="card-img-top" alt={item.name} />
-                            <div className="card-body">
-                                <h5>{item.name}</h5>
-                                <p>{item.description}</p>
-                                <p><strong>Price:</strong> ${item.price}</p>
-                                <p><strong>In stock:</strong> {item.stock}</p>
+            {/* Display paginated items */}
+            <div className="container my-4">
+                <h2 className="mb-4 text-center">Menu</h2>
+                <div className="row">
+                    {currentItems.map(item => (
+                        <div key={item.id} className="col-md-4 mb-4">
+                            <div className="card h-100">
+                                <img
+                                    src={item.image || "./images/placeholder.png"}
+                                    className="card-img-top"
+                                    alt={item.name}
+                                    style={{ height: "200px", objectFit: "cover" }}
+                                />
+                                <div className="card-body d-flex flex-column">
+                                    <h5 className="card-title">{item.name}</h5>
+                                    <p className="card-text">{item.description}</p>
+                                    <div className="mt-auto">
+                                        <p className="fw-bold">${item.price.toFixed(2)}</p>
+                                        <button className="btn btn-primary w-100">Add to Cart</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
             </div>
 
             <ReactPaginate
                 previousLabel={'<'}
                 nextLabel={'>'}
                 breakLabel={'...'}
-                pageCount={3}
+                pageCount={pageCount}
                 marginPagesDisplayed={1}
                 pageRangeDisplayed={3}
                 onPageChange={handlePageClick}
@@ -164,6 +179,7 @@ const Home = () => {
                 nextLinkClassName='page-link'
                 breakClassName='page-item'
                 breakLinkClassName='page-link'
+                forcePage={currentPage}
             />
         </>
     );
