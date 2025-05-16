@@ -32,6 +32,12 @@ public class TableInformationController {
         return ResponseEntity.ok(tableInformationService.getTableInformationById(tableId));
     }
 
+    @GetMapping("/tableName/{tableName}")
+    public ResponseEntity<TableInformation> getTableInformationByTableName(@PathVariable String tableName) {
+        return ResponseEntity.ok(tableInformationService.getTableInformationByTableName(tableName));
+    }
+
+
     @DeleteMapping("/{tableId}")
     public ResponseEntity<Void> deleteTableInformation(@PathVariable UUID tableId) {
         tableInformationService.deleteTableInformation(tableId);
