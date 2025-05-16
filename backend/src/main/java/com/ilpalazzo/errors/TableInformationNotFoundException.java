@@ -10,7 +10,11 @@ public class TableInformationNotFoundException extends RuntimeException {
         super("Table information not found with id: " + tableId);
     }
 
-    public TableInformationNotFoundException(String message) {
+    public TableInformationNotFoundException(String tableName) {
+        super("Table information not found with table name: " + tableName);
+    }
+
+    public TableInformationNotFoundException(String message, boolean isCustomMessage) {
         super(message);
     }
 }

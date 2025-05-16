@@ -37,6 +37,12 @@ public class TableInformationServiceImpl implements TableInformationService {
     }
 
     @Override
+    public TableInformation getTableInformationByTableName(String tableName) {
+        return tableInformationRepository.findByTableName(tableName)
+                .orElseThrow(() -> new TableInformationNotFoundException(tableName));
+    }
+
+    @Override
     public void deleteTableInformation(UUID tableId) {
         if (!tableInformationRepository.existsById(tableId)) {
             throw new TableInformationNotFoundException(tableId);

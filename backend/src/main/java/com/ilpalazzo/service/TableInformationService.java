@@ -13,6 +13,8 @@ public interface TableInformationService {
 
     TableInformation getTableInformationById(UUID tableId);
 
+    TableInformation getTableInformationByTableName(String tableName);
+
     void deleteTableInformation(UUID tableId);
 
     TableInformation updateTableInformation(UUID tableId, TableInformation updatedTableInformation);

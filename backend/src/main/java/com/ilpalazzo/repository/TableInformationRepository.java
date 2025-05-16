@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface TableInformationRepository extends JpaRepository<TableInformation, UUID> {
     Optional<TableInformation> findByTableId(UUID tableId);
-    List<TableInformation> findByTableName(String tableName);
+    Optional<TableInformation> findByTableName(String tableName);
 }
