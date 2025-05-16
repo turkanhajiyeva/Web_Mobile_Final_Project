@@ -5,7 +5,7 @@ import com.ilpalazzo.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.ilpalazzo.rabbit.OrderMessageProducer;
+import com.ilpalazzo.rabbit.RabbitMQSender;
 import com.ilpalazzo.repository.OrderRepository;
 import java.util.Map;
 
@@ -20,15 +20,15 @@ public class OrderController {
     private OrderService orderService;
 
     @Autowired
-    private OrderMessageProducer orderMessageProducer;
+    private RabbitMQSender rabbitMQSender;
 
     @Autowired
     private OrderRepository orderRepository;
 
     @PostMapping
-    public ResponseEntity<String> placeOrder(@RequestBody Order order) {
-        orderMessageProducer.sendOrder(order); // send the order object to the queue
-        return ResponseEntity.accepted().body("Order is being processed asynchronously.");
+    public ResponseEntity<String> sendMessage(@RequestBody Map<String, Object> body) {
+        rabbitMQSender.send(body); // can be any serializable object
+        return ResponseEntity.ok("Message sent to RabbitMQ");
     }
 
     @GetMapping

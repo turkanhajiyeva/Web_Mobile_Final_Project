@@ -1,31 +1,41 @@
 package com.ilpalazzo.rabbit;
 
 import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfig {
+    @Value("${sample.rabbitmq.queue}")
+    String queueName;
+    @Value("${sample.rabbitmq.exchange}")
+    String exchange;
+    @Value("${sample.rabbitmq.routingkey}")
+    private String routingkey;
 
-    public static final String ORDER_QUEUE = "orderQueue";
-    public static final String ORDER_EXCHANGE = "orderExchange";
-    public static final String ORDER_ROUTING_KEY = "orderRoutingKey";
-
-    // Define the Queue
     @Bean
-    public Queue orderQueue() {
-        return new Queue(ORDER_QUEUE, false);
+    Queue queue() {
+        return new Queue(queueName, false);
     }
 
-    // Define the Exchange
     @Bean
-    public TopicExchange orderExchange() {
-        return new TopicExchange(ORDER_EXCHANGE);
+    DirectExchange exchange() {
+        return new DirectExchange(exchange);
     }
 
-    // Define the Binding between the Queue and Exchange
     @Bean
-    public Binding orderBinding(Queue orderQueue, TopicExchange orderExchange) {
-        return BindingBuilder.bind(orderQueue).to(orderExchange).with(ORDER_ROUTING_KEY);
+    Binding binding(Queue queue, DirectExchange exchange) {
+        return BindingBuilder.bind(queue).to(exchange).with(routingkey);
     }
+
+    @Bean
+    public MessageConverter jsonMessageConverter() {
+        return new Jackson2JsonMessageConverter();
+    }
+
 }
