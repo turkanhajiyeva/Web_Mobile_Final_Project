@@ -1,66 +1,67 @@
-import ReactPaginate from 'react-paginate';
-import { Carousel,Dropdown } from 'react-bootstrap';
+import { Carousel, Dropdown } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import { useAuth } from "../context/AuthContext";
+import MenuItemsGrid from './MenuItemsGrid';
+import MenuItemsService from './MenuItemsService';
+import './Home.css';
 
 const Home = () => {
-  const [items, setItems] = useState([]);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  const [currentPage, setCurrentPage] = useState(0);
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const itemsPerPage = 12;
-  const { user } = useAuth();
+    const [items, setItems] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [selectedCategory, setSelectedCategory] = useState("All");
+    const itemsPerPage = 12;
+    const { user } = useAuth();
 
-  // Cart state inside Home
-  const [cartItems, setCartItems] = useState([]);
+    // Cart state inside Home
+    const [cartItems, setCartItems] = useState([]);
 
-  const addToCart = (item) => {
-    setCartItems(prevItems => {
-      const existing = prevItems.find(i => i.id === item.id);
-      if (existing) {
-        return prevItems.map(i =>
-          i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
-        );
-      }
-      return [...prevItems, { ...item, quantity: 1 }];
-    });
-  };
+    const addToCart = (item) => {
+        setCartItems(prevItems => {
+            const existing = prevItems.find(i => i.id === item.id);
+            if (existing) {
+                return prevItems.map(i =>
+                    i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+                );
+            }
+            return [...prevItems, { ...item, quantity: 1 }];
+        });
+    };
 
-  const removeFromCart = (id) => {
-    setCartItems(prevItems => prevItems.filter(i => i.id !== id));
-  };
+    const removeFromCart = (id) => {
+        setCartItems(prevItems => prevItems.filter(i => i.id !== id));
+    };
 
-  const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-  const fetchData = async (category) => {
-    try {
-      const categoryPath = category === 'All' ? '' : encodeURIComponent(category);
-      const url = categoryPath 
-          ? `http://localhost:8080/api/menuitems/category/${categoryPath}` 
-          : 'http://localhost:8080/api/menuitems';
-      const res = await fetch(url);
-      const data = await res.json();
-      setItems(data);
-      setCurrentPage(0); // reset page when category changes
-    } catch (err) {
-      console.error('Failed to fetch products:', err);
-    }
-  };
+    const fetchMenuItems = async () => {
+        setLoading(true);
+        try {
+            let data;
+            if (selectedCategory === 'All') {
+                data = await MenuItemsService.getAllMenuItems();
+            } else {
+                data = await MenuItemsService.getMenuItemsByCategory(selectedCategory);
+            }
+            setItems(data);
+            setCurrentPage(0); // reset page when category changes
+            setError(null);
+        } catch (err) {
+            console.error('Failed to fetch menu items:', err);
+            setError('Failed to load menu items. Please try again later.');
+        } finally {
+            setLoading(false);
+        }
+    };
 
-  useEffect(() => {
-    fetchData(selectedCategory);
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [selectedCategory]);
-
-  const handlePageClick = (data) => {
-    setCurrentPage(data.selected);
-  };
-
-  const offset = currentPage * itemsPerPage;
-  const currentItems = items.slice(offset, offset + itemsPerPage);
-  const pageCount = Math.ceil(items.length / itemsPerPage);
+    useEffect(() => {
+        fetchMenuItems();
+        const handleResize = () => setIsMobile(window.innerWidth < 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, [selectedCategory]);
 
     return (
         <>
@@ -114,15 +115,16 @@ const Home = () => {
                     </div>
                 </Carousel.Item>
             </Carousel>
+
             {/* Division Line */}
-            <div class="divline">
-                <div class="divlinein">
-                    <hr></hr>
+            <div className="divline">
+                <div className="divlinein">
+                    <hr />
                 </div>
             </div>
-            
-            <div className="menudiv">
-            </div>
+
+            <div className="menudiv"></div>
+
             {/* Cute Picture */}
             <div className='row QR'>
                 <div className="col-sm-9 col-md-8 my-2 qrtext">
@@ -139,94 +141,82 @@ const Home = () => {
                     <img src='./images/UnderwaterMiku.png' alt='WideCutePic' className='widepic'></img>
                 </div>
             </div>
+
             {/* Category Filter Menu */}
-            <nav className="menunavbar">
-                <ul className="d-flex list-unstyled gap-3 justify-content-center">
-                    {['All', 'Main Courses', 'Drinks', 'Appetizers'].map(category => (
-                        <li key={category}>
-                            <button
-                                onClick={() => setSelectedCategory(category)}
-                                className={`btn btn-link ${selectedCategory === category ? 'fw-bold text-decoration-underline' : ''}`}
-                            >
-                                {category}
-                            </button>
-                        </li>
-                    ))}
-                </ul>
-            </nav>
-            {/* Cart */}
+            <div className="menu-section">
+                <h2 className="menu-title">Our Menu</h2>
 
-            <Dropdown>
-            <Dropdown.Toggle variant="primary" id="dropdown-basic">
-                My Cart: ${totalPrice.toFixed(2)}
-            </Dropdown.Toggle>
+                <nav className="menunavbar">
+                    <ul className="d-flex list-unstyled gap-3 justify-content-center">
+                        {['All', 'Main Courses', 'Drinks', 'Appetizers'].map(category => (
+                            <li key={category}>
+                                <button
+                                    onClick={() => setSelectedCategory(category)}
+                                    className={`btn btn-link ${selectedCategory === category ? 'active-category' : ''}`}
+                                >
+                                    {category}
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                </nav>
 
-            <Dropdown.Menu>
-                {cartItems.length === 0 && <Dropdown.ItemText>Your cart is empty.</Dropdown.ItemText>}
-                {cartItems.map(item => (
-                <Dropdown.Item key={item.id} as="div" className="d-flex justify-content-between align-items-center">
-                    <div>
-                    <strong>{item.name}</strong><br />
-                    Qty: {item.quantity}<br />
-                    Price: ${(item.price * item.quantity).toFixed(2)}
-                    </div>
-                    <button
-                    className="btn btn-sm btn-danger"
-                    onClick={() => removeFromCart(item.id)}
-                    >
-                    Remove
-                    </button>
-                </Dropdown.Item>
-                ))}
-            </Dropdown.Menu>
-            </Dropdown>
+                {/* Cart Dropdown */}
+                <div className="cart-container">
+                    <Dropdown>
+                        <Dropdown.Toggle variant="primary" id="dropdown-basic">
+                            My Cart: ${totalPrice.toFixed(2)}
+                        </Dropdown.Toggle>
 
-            {/* Display paginated items */}
-            <div className="container my-4">
-                <h2 className="mb-4 text-center">Menu</h2>
-                <div className="row">
-                    {currentItems.map(item => (
-                        <div key={item.id} className="col-md-4 mb-4">
-                            <div className="card h-100">
-                                <img
-                                    src={item.image || "./images/placeholder.png"}
-                                    className="card-img-top"
-                                    alt={item.name}
-                                    style={{ height: "200px", objectFit: "cover" }}
-                                />
-                                <div className="card-body d-flex flex-column">
-                                    <h5 className="card-title">{item.name}</h5>
-                                    <p className="card-text">{item.description}</p>
-                                    <div className="mt-auto">
-                                        <p className="fw-bold">${item.price.toFixed(2)}</p>
-                                        <button className="btn btn-miku w-100" onClick={() => addToCart(item)}>Add to Cart</button>
+                        <Dropdown.Menu>
+                            {cartItems.length === 0 && <Dropdown.ItemText>Your cart is empty.</Dropdown.ItemText>}
+                            {cartItems.map(item => (
+                                <Dropdown.Item key={item.id} as="div" className="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <strong>{item.name}</strong><br />
+                                        Qty: {item.quantity}<br />
+                                        Price: ${(item.price * item.quantity).toFixed(2)}
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
+                                    <button
+                                        className="btn btn-sm btn-danger"
+                                        onClick={() => removeFromCart(item.id)}
+                                    >
+                                        Remove
+                                    </button>
+                                </Dropdown.Item>
+                            ))}
+                        </Dropdown.Menu>
+                    </Dropdown>
                 </div>
-            </div>
 
-            <ReactPaginate
-                previousLabel={'<'}
-                nextLabel={'>'}
-                breakLabel={'...'}
-                pageCount={pageCount}
-                marginPagesDisplayed={1}
-                pageRangeDisplayed={3}
-                onPageChange={handlePageClick}
-                containerClassName='pagination justify-content-center'
-                pageClassName='page-item'
-                pageLinkClassName='page-link'
-                previousClassName='page-item'
-                previousLinkClassName='page-link'
-                nextClassName='page-item'
-                nextLinkClassName='page-link'
-                breakClassName='page-item'
-                breakLinkClassName='page-link'
-                forcePage={currentPage}
-            />
+                {/* Loading and Error States */}
+                {loading && (
+                    <div className="loading-container">
+                        <div className="spinner-border text-primary" role="status">
+                            <span className="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                )}
+
+                {error && (
+                    <div className="error-container">
+                        <div className="alert alert-danger" role="alert">
+                            {error}
+                        </div>
+                    </div>
+                )}
+
+                {/* Menu Items Grid */}
+                {!loading && !error && (
+                    <MenuItemsGrid
+                        items={items}
+                        onAddToCart={addToCart}
+                        currentPage={currentPage}
+                        setCurrentPage={setCurrentPage}
+                        itemsPerPage={itemsPerPage}
+                    />
+                )}
+            </div>
         </>
     );
 };
