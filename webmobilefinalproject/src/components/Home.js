@@ -34,7 +34,10 @@ const Home = () => {
         setCartItems(prevItems => prevItems.filter(i => i.id !== id));
     };
 
-    const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const totalPrice = cartItems.reduce(
+        (sum, item) => sum + parseFloat(item.price) * item.quantity,
+        0
+    );
 
     const fetchMenuItems = async () => {
         setLoading(true);

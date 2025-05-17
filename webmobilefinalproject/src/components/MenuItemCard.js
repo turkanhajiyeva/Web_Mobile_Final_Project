@@ -6,17 +6,18 @@ const MenuItemCard = ({ item, onAddToCart }) => {
         <div className="menu-item-card">
             <div className="card-image-container">
                 <img
-                    src={item.image || "./images/placeholder.png"}
+                    src="./images/placeholder.png"
                     alt={item.name}
                     className="card-image"
                 />
-                {item.isNew && <span className="new-badge">New</span>}
+                {/* Note: newItem flag is not part of the DTO */}
             </div>
             <div className="card-content">
                 <h3 className="item-name">{item.name}</h3>
                 <p className="item-description">{item.description}</p>
+                <div className="category-badge">{item.category}</div>
                 <div className="card-footer">
-                    <span className="item-price">${item.price.toFixed(2)}</span>
+                    <span className="item-price">${parseFloat(item.price).toFixed(2)}</span>
                     <button
                         className="add-to-cart-btn"
                         onClick={() => onAddToCart(item)}
