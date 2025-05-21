@@ -17,10 +17,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ilpalazzo.ilpalazzoApplicationTest;
 import com.ilpalazzo.model.entity.LoginInfo;
 import com.ilpalazzo.repository.LoginInfoRepository;
 
-@SpringBootTest
+@SpringBootTest(classes = ilpalazzoApplicationTest.class)
 @AutoConfigureMockMvc
 class LoginInfoControllerIntegrationTest {
 
