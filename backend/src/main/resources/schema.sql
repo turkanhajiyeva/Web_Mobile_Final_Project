@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS menu_items (
 
 CREATE TABLE IF NOT EXISTS orders (
     order_id SERIAL PRIMARY KEY,
+    user_id CHAR(128),
     table_id VARCHAR(50) NOT NULL,
     order_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     total_amount DECIMAL(10,2),

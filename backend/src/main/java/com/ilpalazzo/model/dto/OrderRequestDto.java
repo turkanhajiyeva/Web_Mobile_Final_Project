@@ -6,9 +6,19 @@ import java.util.UUID;
 
 public class OrderRequestDto {
 
+    private String userId;
     private String tableId;
     private List<OrderItemRequestDto> items;
     private BigDecimal totalAmount;
+
+    // Getters and Setters
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public String getTableId() {
         return tableId;

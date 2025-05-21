@@ -8,7 +8,7 @@ import java.util.UUID;
 public class TableInformation {
 
     @Id
-    @Column(name = "table_id", columnDefinition = "UUID")
+    @Column(name = "table_id", columnDefinition = "String")
     private UUID tableId;
 
     @Column(name = "table_name", length = 50, nullable = false)

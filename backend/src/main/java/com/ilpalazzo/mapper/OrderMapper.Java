@@ -11,6 +11,7 @@ public class OrderMapper {
 
     public static Order toEntity(OrderRequestDto dto) {
         Order order = new Order();
+        order.setUserId(dto.getUserId()); 
         order.setTableId(dto.getTableId());
         order.setTotalAmount(dto.getTotalAmount());
 
@@ -50,6 +51,7 @@ public class OrderMapper {
         OrderResponseDto dto = new OrderResponseDto();
         dto.setOrderId(order.getOrderId());
         dto.setTableId(order.getTableId());
+        dto.setUserId(order.getUserId());
         dto.setOrderTime(order.getOrderTime());
         dto.setStatus(order.getStatus());
         dto.setTotalAmount(order.getTotalAmount());

@@ -8,6 +8,7 @@ import java.util.UUID;
 public class OrderResponseDto {
 
     private Long orderId;
+    private String userId;
     private String tableId;
     private LocalDateTime orderTime;
     private String status;
@@ -28,6 +29,14 @@ public class OrderResponseDto {
 
     public void setTableId(String tableId) {
         this.tableId = tableId;
+    }
+    
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public LocalDateTime getOrderTime() {

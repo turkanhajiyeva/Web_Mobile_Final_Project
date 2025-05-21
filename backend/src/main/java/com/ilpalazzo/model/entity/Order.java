@@ -17,6 +17,9 @@ public class Order {
     @Column(name = "order_id")
     private Long orderId;
 
+    @Column(name = "user_id")  // Added user id here to use in message thing
+    private String userId;
+
     @Column(name = "table_id", nullable = false)
     private String tableId;
 
@@ -41,6 +44,14 @@ public class Order {
         this.orderId = orderId;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+    
     public String getTableId() {
         return tableId;
     }
