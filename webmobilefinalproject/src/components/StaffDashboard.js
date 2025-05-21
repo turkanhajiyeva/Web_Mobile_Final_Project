@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const statusOptions = [
+  'all',
   'pending',
   'in_preparation',
   'ready',
@@ -21,6 +22,8 @@ const StaffDashboard = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [detailsLoading, setDetailsLoading] = useState(false);
   const [detailsError, setDetailsError] = useState(null);
+  const [filterStatus, setFilterStatus] = useState('all');
+  const [filterTable, setFilterTable] = useState('');
 
   useEffect(() => {
     // Redirect if not staff
@@ -87,9 +90,37 @@ const StaffDashboard = () => {
     setDetailsError(null);
   };
 
+  // Filtering logic
+  const filteredOrders = orders.filter(order => {
+    const statusMatch = filterStatus === 'all' || order.status === filterStatus;
+    const tableMatch = filterTable.trim() === '' || (order.tableId && order.tableId.toLowerCase().includes(filterTable.trim().toLowerCase()));
+    return statusMatch && tableMatch;
+  });
+
   return (
     <div className="container mt-5">
       <h2 className="mb-4">Staff Dashboard</h2>
+      {/* Filter Controls */}
+      <div className="row mb-3">
+        <div className="col-md-3 mb-2">
+          <label className="form-label">Filter by Status</label>
+          <select className="form-select" value={filterStatus} onChange={e => setFilterStatus(e.target.value)}>
+            {statusOptions.map(status => (
+              <option key={status} value={status}>{status.charAt(0).toUpperCase() + status.slice(1).replace('_', ' ')}</option>
+            ))}
+          </select>
+        </div>
+        <div className="col-md-3 mb-2">
+          <label className="form-label">Filter by Table</label>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Enter table number or ID"
+            value={filterTable}
+            onChange={e => setFilterTable(e.target.value)}
+          />
+        </div>
+      </div>
       {loading && <div>Loading orders...</div>}
       {error && <div className="alert alert-danger">{error}</div>}
       {!loading && !error && (
@@ -106,10 +137,10 @@ const StaffDashboard = () => {
               </tr>
             </thead>
             <tbody>
-              {orders.length === 0 ? (
+              {filteredOrders.length === 0 ? (
                 <tr><td colSpan="6" className="text-center">No orders found.</td></tr>
               ) : (
-                orders.map(order => (
+                filteredOrders.map(order => (
                   <tr key={order.orderId}>
                     <td>{order.orderId}</td>
                     <td>{order.tableId}</td>
@@ -120,7 +151,7 @@ const StaffDashboard = () => {
                         disabled={updatingOrderId === order.orderId}
                         className="form-select"
                       >
-                        {statusOptions.map(status => (
+                        {statusOptions.filter(s => s !== 'all').map(status => (
                           <option key={status} value={status}>{status}</option>
                         ))}
                       </select>
