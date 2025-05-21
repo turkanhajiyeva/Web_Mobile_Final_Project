@@ -54,4 +54,12 @@ public class LoginInfo {
     public LoginInfo() {
     // no-arg constructor needed by JPA
     }
+
+    public LoginInfo(String userId, String username, String password, String role) {
+    this.userId = userId;
+    this.username = username;
+    this.password = password;
+    this.role = role;
+    }
+
 }
