@@ -8,7 +8,8 @@ const MenuItemsGrid = ({
                            onAddToCart,
                            currentPage,
                            setCurrentPage,
-                           itemsPerPage
+                           itemsPerPage,
+                           isMobile
                        }) => {
     // Calculate pagination
     const offset = currentPage * itemsPerPage;
@@ -27,7 +28,11 @@ const MenuItemsGrid = ({
                 {currentItems.length > 0 ? (
                     currentItems.map(item => (
                         <div key={item.id} className="menu-item-wrapper">
-                            <MenuItemCard item={item} onAddToCart={onAddToCart} />
+                            <MenuItemCard 
+                                item={item} 
+                                onAddToCart={onAddToCart}
+                                isMobile={isMobile}
+                            />
                         </div>
                     ))
                 ) : (

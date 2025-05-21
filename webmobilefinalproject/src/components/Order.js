@@ -1,6 +1,8 @@
 import ReactPaginate from 'react-paginate';
 import { useState, useEffect } from 'react';
 import { useAuth } from "../context/AuthContext";
+import { useCart } from "../context/CartContext";
+import Cart from './Cart';
 
 const Order = () => {
     const [items, setItems] = useState([]);
@@ -9,8 +11,10 @@ const Order = () => {
     const [selectedCategory, setSelectedCategory] = useState("All");
     const [hasAccess, setHasAccess] = useState(false);
     const [pageCount, setPageCount] = useState(0);
+    const [showCart, setShowCart] = useState(false);
     const itemsPerPage = 6;
     const { user } = useAuth();
+    const { cartItems, total, addToCart } = useCart();
 
     // Detect screen size changes
     useEffect(() => {
@@ -86,96 +90,71 @@ const Order = () => {
                         </li>
                     ))}
                 </ul>
-                <div className='cart d-flex align-items-center justify-content-end pe-3'>
+                <div className='cart d-flex align-items-center justify-content-end pe-3' onClick={() => setShowCart(!showCart)}>
                     <i className="bi bi-cart4 fs-4"></i>
-                    <span className='ms-2'>0 items - $0.00</span>
+                    <span className='ms-2'>{cartItems.length} items - ${total.toFixed(2)}</span>
                 </div>
             </nav>
 
-            {/* Access Control */}
-            {!hasAccess ? (
-                <>
-                    {/* Product Cards */}
-                    <div className="row my-4 products">
-                        {items.map((item) => (
-                            <div className={`col-sm-12 ${isMobile ? '' : 'col-md-6'} my-2`} key={item.id}>
-                                <div className="card shadow-sm w-100">
-                                    <img src={item.image} className="card-img-top" alt={item.name || "menu item"} />
-                                    <div className="card-body">
-                                        <h5>{item.name}</h5>
-                                        <p>{item.description}</p>
-                                        <p><strong>Price:</strong> ${item.price}</p>
-                                        <p><strong>In stock:</strong> {item.stock}</p>
-                                        <button className="btn btn-miku">ADD TO CART</button>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
+            {/* Cart Sidebar */}
+            {showCart && (
+                <div className="cart-sidebar">
+                    <div className="d-flex justify-content-between align-items-center mb-3">
+                        <h3>Your Cart</h3>
+                        <button 
+                            className="btn btn-link" 
+                            onClick={() => setShowCart(false)}
+                        >
+                            <i className="bi bi-x-lg"></i>
+                        </button>
                     </div>
-
-                    {/* Pagination */}
-                    <ReactPaginate
-                        previousLabel={'<'}
-                        nextLabel={'>'}
-                        breakLabel={'...'}
-                        pageCount={pageCount}
-                        marginPagesDisplayed={1}
-                        pageRangeDisplayed={3}
-                        onPageChange={handlePageClick}
-                        containerClassName='pagination justify-content-center'
-                        pageClassName='page-item'
-                        pageLinkClassName='page-link'
-                        previousClassName='page-item'
-                        previousLinkClassName='page-link'
-                        nextClassName='page-item'
-                        nextLinkClassName='page-link'
-                        breakClassName='page-item'
-                        breakLinkClassName='page-link'
-                        forcePage={currentPage - 1}
-                    />
-                </>
-            ) : (
-                <>
-                    {/* Product Cards */}
-                    <div className="row my-4 products">
-                        {items.map((item) => (
-                            <div className={`col-sm-12 ${isMobile ? '' : 'col-md-6'} my-2`} key={item.id}>
-                                <div className="card shadow-sm w-100">
-                                    <img src={item.image} className="card-img-top" alt={item.name || "menu item"} />
-                                    <div className="card-body">
-                                        <h5>{item.name}</h5>
-                                        <p>{item.description}</p>
-                                        <p><strong>Price:</strong> ${item.price}</p>
-                                        <p><strong>In stock:</strong> {item.stock}</p>
-                                        <button className="btn btn-miku">ADD TO CART</button>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-
-                    {/* Pagination */}
-                    <ReactPaginate
-                        previousLabel={'<'}
-                        nextLabel={'>'}
-                        breakLabel={'...'}
-                        pageCount={pageCount}
-                        marginPagesDisplayed={1}
-                        pageRangeDisplayed={3}
-                        onPageChange={handlePageClick}
-                        containerClassName='pagination justify-content-center'
-                        pageClassName='page-item'
-                        pageLinkClassName='page-link'
-                        previousClassName='page-item'
-                        previousLinkClassName='page-link'
-                        nextClassName='page-item'
-                        nextLinkClassName='page-link'
-                        breakClassName='page-item'
-                        breakLinkClassName='page-link'
-                        forcePage={currentPage - 1}
-                    />
-                </>
+                    <Cart />
+                </div>
             )}
+
+            {/* Product Cards */}
+            <div className="row my-4 products">
+                {items.map((item) => (
+                    <div className={`col-sm-12 ${isMobile ? '' : 'col-md-6'} my-2`} key={item.id}>
+                        <div className="card shadow-sm w-100">
+                            <img src={item.image} className="card-img-top" alt={item.name || "menu item"} />
+                            <div className="card-body">
+                                <h5>{item.name}</h5>
+                                <p>{item.description}</p>
+                                <p><strong>Price:</strong> ${item.price}</p>
+                                <p><strong>In stock:</strong> {item.stock}</p>
+                                <button 
+                                    className="btn btn-miku"
+                                    onClick={() => addToCart(item)}
+                                >
+                                    ADD TO CART
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* Pagination */}
+            <ReactPaginate
+                previousLabel={'<'}
+                nextLabel={'>'}
+                breakLabel={'...'}
+                pageCount={pageCount}
+                marginPagesDisplayed={1}
+                pageRangeDisplayed={3}
+                onPageChange={handlePageClick}
+                containerClassName='pagination justify-content-center'
+                pageClassName='page-item'
+                pageLinkClassName='page-link'
+                previousClassName='page-item'
+                previousLinkClassName='page-link'
+                nextClassName='page-item'
+                nextLinkClassName='page-link'
+                breakClassName='page-item'
+                breakLinkClassName='page-link'
+                forcePage={currentPage - 1}
+            />
         </>
     );
 };

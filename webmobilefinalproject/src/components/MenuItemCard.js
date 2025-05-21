@@ -1,30 +1,27 @@
 import React from 'react';
 import './MenuItemCard.css';
 
-const MenuItemCard = ({ item, onAddToCart }) => {
+const MenuItemCard = ({ item, onAddToCart, isMobile }) => {
     return (
-        <div className="menu-item-card">
-            <div className="card-image-container">
-                <img
-                    src="./images/placeholder.png"
-                    alt={item.name}
-                    className="card-image"
-                />
-                {/* Note: newItem flag is not part of the DTO */}
-            </div>
-            <div className="card-content">
-                <h3 className="item-name">{item.name}</h3>
-                <p className="item-description">{item.description}</p>
-                <div className="category-badge">{item.category}</div>
-                <div className="card-footer">
-                    <span className="item-price">${parseFloat(item.price).toFixed(2)}</span>
-                    <button
-                        className="add-to-cart-btn"
-                        onClick={() => onAddToCart(item)}
-                    >
-                        Add to Cart
-                    </button>
+        <div className="card shadow-sm w-100">
+            <img 
+                src={item.image || "./images/placeholder.png"} 
+                className="card-img-top" 
+                alt={item.name} 
+            />
+            <div className="card-body">
+                <h5 className="card-title">{item.name}</h5>
+                <p className="card-text">{item.description}</p>
+                <div className="d-flex justify-content-between align-items-center">
+                    <span className="badge bg-miku">{item.category}</span>
+                    <span className="fw-bold">${parseFloat(item.price).toFixed(2)}</span>
                 </div>
+                <button 
+                    className="btn btn-miku w-100 mt-3"
+                    onClick={() => onAddToCart(item)}
+                >
+                    ADD TO CART
+                </button>
             </div>
         </div>
     );

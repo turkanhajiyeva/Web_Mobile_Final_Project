@@ -1,8 +1,10 @@
 import { Carousel, Dropdown } from 'react-bootstrap';
 import { useState, useEffect } from 'react';
 import { useAuth } from "../context/AuthContext";
+import { useCart } from "../context/CartContext";
 import MenuItemsGrid from './MenuItemsGrid';
 import MenuItemsService from './MenuItemsService';
+import Cart from './Cart';
 import './Home.css';
 
 const Home = () => {
@@ -12,34 +14,12 @@ const Home = () => {
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
     const [currentPage, setCurrentPage] = useState(0);
     const [selectedCategory, setSelectedCategory] = useState("All");
+    const [showCart, setShowCart] = useState(false);
     const itemsPerPage = 12;
     const { user } = useAuth();
+    const { cartItems, total, addToCart, removeFromCart } = useCart();
 
-    // Cart state inside Home
-    const [cartItems, setCartItems] = useState([]);
-
-    const addToCart = (item) => {
-        setCartItems(prevItems => {
-            const existing = prevItems.find(i => i.id === item.id);
-            if (existing) {
-                return prevItems.map(i =>
-                    i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
-                );
-            }
-            return [...prevItems, { ...item, quantity: 1 }];
-        });
-    };
-
-    const removeFromCart = (id) => {
-        setCartItems(prevItems => prevItems.filter(i => i.id !== id));
-    };
-
-    const totalPrice = cartItems.reduce(
-        (sum, item) => sum + parseFloat(item.price) * item.quantity,
-        0
-    );
-
-    const fetchMenuItems = async () => {
+    const fetchData = async () => {
         setLoading(true);
         try {
             let data;
@@ -60,7 +40,7 @@ const Home = () => {
     };
 
     useEffect(() => {
-        fetchMenuItems();
+        fetchData();
         const handleResize = () => setIsMobile(window.innerWidth < 768);
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
@@ -162,35 +142,34 @@ const Home = () => {
                             </li>
                         ))}
                     </ul>
+                    <div 
+                        className='cart d-flex align-items-center justify-content-end pe-3'
+                        onClick={() => setShowCart(!showCart)}
+                        style={{ cursor: 'pointer' }}
+                    >
+                        <i className="bi bi-cart4 fs-4"></i>
+                        <span className='ms-2'>{cartItems.length} items - ${total.toFixed(2)}</span>
+                    </div>
                 </nav>
 
-                {/* Cart Dropdown */}
-                <div className="cart-container">
-                    <Dropdown>
-                        <Dropdown.Toggle variant="primary" id="dropdown-basic">
-                            My Cart: ${totalPrice.toFixed(2)}
-                        </Dropdown.Toggle>
-
-                        <Dropdown.Menu>
-                            {cartItems.length === 0 && <Dropdown.ItemText>Your cart is empty.</Dropdown.ItemText>}
-                            {cartItems.map(item => (
-                                <Dropdown.Item key={item.id} as="div" className="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <strong>{item.name}</strong><br />
-                                        Qty: {item.quantity}<br />
-                                        Price: ${(item.price * item.quantity).toFixed(2)}
-                                    </div>
-                                    <button
-                                        className="btn btn-sm btn-danger"
-                                        onClick={() => removeFromCart(item.id)}
-                                    >
-                                        Remove
-                                    </button>
-                                </Dropdown.Item>
-                            ))}
-                        </Dropdown.Menu>
-                    </Dropdown>
-                </div>
+                {/* Cart Sidebar */}
+                {showCart && (
+                    <>
+                        <div className="cart-overlay" onClick={() => setShowCart(false)} />
+                        <div className="cart-sidebar">
+                            <div className="d-flex justify-content-between align-items-center mb-3">
+                                <h3>Your Cart</h3>
+                                <button 
+                                    className="btn btn-link" 
+                                    onClick={() => setShowCart(false)}
+                                >
+                                    <i className="bi bi-x-lg"></i>
+                                </button>
+                            </div>
+                            <Cart />
+                        </div>
+                    </>
+                )}
 
                 {/* Loading and Error States */}
                 {loading && (
@@ -202,17 +181,16 @@ const Home = () => {
                 )}
 
                 {error && (
-                    <div className="error-container">
-                        <div className="alert alert-danger" role="alert">
-                            {error}
-                        </div>
+                    <div className="alert alert-danger" role="alert">
+                        {error}
                     </div>
                 )}
 
                 {/* Menu Items Grid */}
                 {!loading && !error && (
-                    <MenuItemsGrid
-                        items={items}
+                    <MenuItemsGrid 
+                        items={items} 
+                        isMobile={isMobile}
                         onAddToCart={addToCart}
                         currentPage={currentPage}
                         setCurrentPage={setCurrentPage}

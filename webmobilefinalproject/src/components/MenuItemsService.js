@@ -33,7 +33,7 @@ export const MenuItemsService = {
     // Fetch a single menu item by ID
     getMenuItemById: async (id) => {
         try {
-            const response = await fetch(`${API_BASE_URL}/menuitems/${id}`);
+            const response = await fetch(`${API_BASE_URL}/products/${id}`);
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
@@ -47,7 +47,7 @@ export const MenuItemsService = {
     // Create a new menu item
     createMenuItem: async (menuItemData) => {
         try {
-            const response = await fetch(`${API_BASE_URL}/menuitems`, {
+            const response = await fetch(`${API_BASE_URL}/products`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ export const MenuItemsService = {
     // Update a menu item
     updateMenuItem: async (id, menuItemData) => {
         try {
-            const response = await fetch(`${API_BASE_URL}/menuitems/${id}`, {
+            const response = await fetch(`${API_BASE_URL}/products/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -87,7 +87,7 @@ export const MenuItemsService = {
     // Delete a menu item
     deleteMenuItem: async (id) => {
         try {
-            const response = await fetch(`${API_BASE_URL}/menuitems/${id}`, {
+            const response = await fetch(`${API_BASE_URL}/products/${id}`, {
                 method: 'DELETE'
             });
             if (!response.ok) {
