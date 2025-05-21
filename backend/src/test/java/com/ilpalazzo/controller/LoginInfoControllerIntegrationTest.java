@@ -77,7 +77,7 @@ class LoginInfoControllerIntegrationTest {
 
     @Test
     void authenticate_shouldReturnLoginInfoIfValid() throws Exception {
-        LoginInfo loginInfo = new LoginInfo("999", "authuser", "authpass", "ADMIN");
+        LoginInfo loginInfo = new LoginInfo("999", "authuser", "authpass", "Manager");
         loginInfoRepository.save(loginInfo);
 
         LoginInfo request = new LoginInfo();
@@ -88,7 +88,7 @@ class LoginInfoControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.role").value("ADMIN"));
+                .andExpect(jsonPath("$.role").value("Manager"));
     }
 
     @Test
@@ -105,13 +105,13 @@ class LoginInfoControllerIntegrationTest {
         LoginInfo existing = new LoginInfo("toUpdate", "olduser", "oldpass", "WAITER");
         loginInfoRepository.save(existing);
 
-        LoginInfo updated = new LoginInfo("toUpdate", "newuser", "newpass", "MANAGER");
+        LoginInfo updated = new LoginInfo("toUpdate", "newuser", "newpass", "Manager");
 
         mockMvc.perform(put("/api/logininfo/toUpdate")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updated)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username").value("newuser"))
-                .andExpect(jsonPath("$.role").value("MANAGER"));
+                .andExpect(jsonPath("$.role").value("Manager"));
     }
 }
