@@ -7,6 +7,7 @@ public class OrderItemResponseDto {
     private Long orderItemId;
     private int menuItemId;
     private int quantity;
+    private MenuItemResponseDto menuItem;
 
     public Long getOrderItemId() {
         return orderItemId;
@@ -30,5 +31,13 @@ public class OrderItemResponseDto {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public MenuItemResponseDto getMenuItem() {
+        return menuItem;
+    }
+
+    public void setMenuItem(MenuItemResponseDto menuItem) {
+        this.menuItem = menuItem;
     }
 }

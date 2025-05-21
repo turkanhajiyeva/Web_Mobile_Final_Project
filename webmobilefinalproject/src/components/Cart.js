@@ -7,20 +7,28 @@ const Cart = () => {
   const { user } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderStatus, setOrderStatus] = useState(null);
+  const [tableNumber, setTableNumber] = useState("");
 
   const handleSubmitOrder = async () => {
     if (cartItems.length === 0) return;
-    
     setIsSubmitting(true);
     try {
+      // Get table ID from URL if present
+      const params = new URLSearchParams(window.location.search);
+      const urlTableId = params.get("table_id");
+      const resolvedTableId = urlTableId || tableNumber.trim();
+      if (!resolvedTableId) {
+        setOrderStatus("error");
+        throw new Error("Table number is required to place an order.");
+      }
       const orderData = {
+        tableId: resolvedTableId,
         items: cartItems.map(item => ({
           menuItemId: item.id,
           quantity: item.quantity
         })),
         totalAmount: total
       };
-
       const response = await fetch("http://localhost:8080/api/orders", {
         method: "POST",
         headers: {
@@ -28,12 +36,17 @@ const Cart = () => {
         },
         body: JSON.stringify(orderData),
       });
-
+      const responseData = await response.json();
       if (response.ok) {
         setOrderStatus("success");
         clearCart();
+        // Redirect to order status page after 2 seconds
+        setTimeout(() => {
+          window.location.href = `/details?order_id=${responseData.orderId}`;
+        }, 2000);
       } else {
         setOrderStatus("error");
+        throw new Error(responseData.message || "Failed to place order");
       }
     } catch (error) {
       console.error("Error submitting order:", error);
@@ -45,6 +58,28 @@ const Cart = () => {
 
   return (
     <div className="cart-container">
+      {/* Table number input if not in URL */}
+      {(() => {
+        const params = new URLSearchParams(window.location.search);
+        const urlTableId = params.get("table_id");
+        if (!urlTableId) {
+          return (
+            <div className="mb-3">
+              <label htmlFor="tableNumber" className="form-label">Table Number</label>
+              <input
+                type="text"
+                className="form-control"
+                id="tableNumber"
+                placeholder="Enter your table number"
+                value={tableNumber}
+                onChange={e => setTableNumber(e.target.value)}
+                disabled={isSubmitting}
+              />
+            </div>
+          );
+        }
+        return null;
+      })()}
       {cartItems.length === 0 ? (
         <div className="text-center py-4">
           <i className="bi bi-cart-x fs-1"></i>
@@ -86,7 +121,7 @@ const Cart = () => {
             <button 
               className="btn btn-miku w-100" 
               onClick={handleSubmitOrder}
-              disabled={isSubmitting}
+              disabled={isSubmitting || (!tableNumber.trim() && !(new URLSearchParams(window.location.search).get("table_id")))}
             >
               {isSubmitting ? (
                 <>

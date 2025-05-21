@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS logininfo (
 );
 
 CREATE TABLE IF NOT EXISTS table_information (
-    table_id UUID PRIMARY KEY, 
+    table_id VARCHAR(50) PRIMARY KEY, 
     table_name VARCHAR(50) NOT NULL,
     qr_code_url VARCHAR(255)
 );
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS menu_items (
 
 CREATE TABLE IF NOT EXISTS orders (
     order_id SERIAL PRIMARY KEY,
-    table_id UUID NOT NULL,
+    table_id VARCHAR(50) NOT NULL,
     order_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     total_amount DECIMAL(10,2),
     status VARCHAR(50) NOT NULL DEFAULT 'pending',

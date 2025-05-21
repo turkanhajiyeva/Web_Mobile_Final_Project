@@ -17,8 +17,8 @@ public class Order {
     @Column(name = "order_id")
     private Long orderId;
 
-    @Column(name = "table_id", columnDefinition = "UUID", nullable = false)
-    private UUID tableId;
+    @Column(name = "table_id", nullable = false)
+    private String tableId;
 
     @Column(name = "order_time", nullable = false)
     private LocalDateTime orderTime = LocalDateTime.now();
@@ -41,11 +41,11 @@ public class Order {
         this.orderId = orderId;
     }
 
-    public UUID getTableId() {
+    public String getTableId() {
         return tableId;
     }
 
-    public void setTableId(UUID tableId) {
+    public void setTableId(String tableId) {
         this.tableId = tableId;
     }
 

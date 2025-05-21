@@ -8,7 +8,7 @@ import java.util.UUID;
 public class OrderResponseDto {
 
     private Long orderId;
-    private UUID tableId;
+    private String tableId;
     private LocalDateTime orderTime;
     private String status;
     private BigDecimal totalAmount;
@@ -22,11 +22,11 @@ public class OrderResponseDto {
         this.orderId = orderId;
     }
 
-    public UUID getTableId() {
+    public String getTableId() {
         return tableId;
     }
 
-    public void setTableId(UUID tableId) {
+    public void setTableId(String tableId) {
         this.tableId = tableId;
     }
 

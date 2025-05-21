@@ -245,6 +245,32 @@
 }
 /*Details*/
 
+/* Details Page Styles */
+.bg-miku {
+    background-color: #EEA1DB !important;
+}
+
+.table th {
+    background-color: #f8f9fa;
+}
+
+.badge {
+    padding: 0.5em 1em;
+    font-size: 0.9em;
+}
+
+.table-responsive {
+    margin-top: 1rem;
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+}
+
+.card-header {
+    border-radius: 10px 10px 0 0 !important;
+}
 
 /*Login*/
 

@@ -6,15 +6,15 @@ import java.util.UUID;
 
 public class OrderRequestDto {
 
-    private UUID tableId;
+    private String tableId;
     private List<OrderItemRequestDto> items;
     private BigDecimal totalAmount;
 
-    public UUID getTableId() {
+    public String getTableId() {
         return tableId;
     }
 
-    public void setTableId(UUID tableId) {
+    public void setTableId(String tableId) {
         this.tableId = tableId;
     }
 

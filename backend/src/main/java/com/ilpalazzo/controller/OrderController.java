@@ -8,9 +8,13 @@ import org.springframework.web.bind.annotation.*;
 import com.ilpalazzo.rabbit.RabbitMQSender;
 import com.ilpalazzo.repository.OrderRepository;
 import java.util.Map;
-
+import com.ilpalazzo.model.dto.OrderRequestDto;
+import com.ilpalazzo.mapper.OrderMapper;
+import com.ilpalazzo.model.dto.OrderResponseDto;
+import com.ilpalazzo.service.MenuItemService;
 
 import java.util.List;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -25,10 +29,29 @@ public class OrderController {
     @Autowired
     private OrderRepository orderRepository;
 
+    @Autowired
+    private MenuItemService menuItemService;
+
     @PostMapping
-    public ResponseEntity<String> sendMessage(@RequestBody Map<String, Object> body) {
-        rabbitMQSender.send(body); // can be any serializable object
-        return ResponseEntity.ok("Message sent to RabbitMQ");
+    public ResponseEntity<?> placeOrder(@RequestBody OrderRequestDto orderRequest) {
+        try {
+            // Convert DTO to entity
+            Order order = OrderMapper.toEntity(orderRequest);
+            
+            // Save order to database
+            Order savedOrder = orderService.placeOrder(order);
+            
+            // Send to RabbitMQ for async processing
+            rabbitMQSender.send(savedOrder);
+            
+            // Convert to response DTO with menu item details
+            OrderResponseDto responseDto = OrderMapper.toResponse(savedOrder, menuItemService);
+            
+            // Return the saved order with its ID
+            return ResponseEntity.ok(responseDto);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Failed to place order: " + e.getMessage());
+        }
     }
 
     @GetMapping
