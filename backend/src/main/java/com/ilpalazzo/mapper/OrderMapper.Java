@@ -11,7 +11,6 @@ public class OrderMapper {
 
     public static Order toEntity(OrderRequestDto dto) {
         Order order = new Order();
-
         order.setTableId(dto.getTableId());
         order.setTotalAmount(dto.getTotalAmount());
 
