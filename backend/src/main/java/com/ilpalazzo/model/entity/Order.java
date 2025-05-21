@@ -85,4 +85,11 @@ public class Order {
             }
         }
     }
+
+    @PrePersist
+    protected void onCreate() {
+        if (this.orderTime == null) {
+            this.orderTime = LocalDateTime.now();
+        }
+    }
 }

@@ -34,7 +34,7 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
-    public MenuItemResponseDto getMenuItemById(Long id) {
+    public MenuItemResponseDto getMenuItemById(int id) {
         MenuItem item = menuItemRepository.findById(id)
                 .orElseThrow(() -> new MenuItemNotFoundException(id));
         return MenuItemMapper.toResponse(item);
@@ -52,7 +52,7 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
-    public MenuItemResponseDto updateMenuItem(Long id, MenuItemRequestDto dto) {
+    public MenuItemResponseDto updateMenuItem(int id, MenuItemRequestDto dto) {
         MenuItem existing = menuItemRepository.findById(id)
                 .orElseThrow(() -> new MenuItemNotFoundException(id));
 
@@ -65,7 +65,7 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
-    public void deleteMenuItem(Long id) {
+    public void deleteMenuItem(int id) {
         if (!menuItemRepository.existsById(id)) {
             throw new MenuItemNotFoundException(id);
         }

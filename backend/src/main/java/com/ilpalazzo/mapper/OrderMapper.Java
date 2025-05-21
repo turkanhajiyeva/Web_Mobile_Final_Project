@@ -75,7 +75,7 @@ public class OrderMapper {
             List<OrderItemResponseDto> items = order.getItems().stream().map(orderItem -> {
                 OrderItemResponseDto itemDto = toResponse(orderItem);
                 try {
-                    MenuItemResponseDto menuItemDto = menuItemService.getMenuItemById((long) orderItem.getMenuItemId());
+                    MenuItemResponseDto menuItemDto = menuItemService.getMenuItemById(orderItem.getMenuItemId());
                     itemDto.setMenuItem(menuItemDto);
                 } catch (Exception e) {
                     itemDto.setMenuItem(null);
