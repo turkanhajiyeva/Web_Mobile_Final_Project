@@ -1,8 +1,11 @@
 import { Outlet, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
+const STAFF_ROLES = ['Manager', 'Waiter', 'Kitchen Staff'];
+
 const Navbar = () => {
     const { user } = useAuth();
+    const isStaff = user && STAFF_ROLES.includes(user.role);
     
   return (
     <>
@@ -21,10 +24,15 @@ const Navbar = () => {
           <li>
             <Link to="/details">Details</Link>
           </li>
-          {user && (
-            <li>
-              <Link to="/staff">Staff Dashboard</Link>
-            </li>
+          {isStaff && (
+            <>
+              <li>
+                <Link to="/staff">Staff Dashboard</Link>
+              </li>
+              <li>
+                <Link to="/menu-management">Menu Management</Link>
+              </li>
+            </>
           )}
           <li className="loginstuff">
             <Link to="/login">Hello, {user ? user.username : "Please Log-In"}</Link>

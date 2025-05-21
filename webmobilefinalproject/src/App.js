@@ -6,6 +6,7 @@ import Login from './components/Login';
 import Order from './components/Order';
 import Details from './components/Details';
 import StaffDashboard from './components/StaffDashboard';
+import MenuManagement from './components/MenuManagement';
 import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
 import "./components/Main.css"
@@ -23,6 +24,7 @@ function App() {
             <Route path='/order' element={<Order />} />
             <Route path="/details" element={<Details />} />
             <Route path="/staff" element={<StaffDashboard />} />
+            <Route path="/menu-management" element={<MenuManagement />} />
           </Routes>
         </Router>
       </CartProvider>
