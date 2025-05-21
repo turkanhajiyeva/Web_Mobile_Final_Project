@@ -2,6 +2,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
+const SAMPLE_USER = {
+  username: "a_r_i_z_o_na",
+  password: "passwordweb",
+  role: "Kitchen Staff"
+};
+
 const Login = () => {
   const [form, setForm] = useState({ username: "", password: "" });
   const [isRegistering, setIsRegistering] = useState(false);
@@ -40,7 +46,7 @@ const Login = () => {
       );
 
       if (!isRegistering) {
-        login({ username: data.username });
+        login({ username: data.username, role: data.role });
         navigate("/");
       } else {
         setIsRegistering(false);
@@ -53,6 +59,12 @@ const Login = () => {
 
   return (
     <div>
+      <div className="alert alert-info" style={{ maxWidth: 400, margin: '0 auto 1rem auto' }}>
+        <strong>Sample Staff Login:</strong><br />
+        Username: <code>{SAMPLE_USER.username}</code><br />
+        Password: <code>{SAMPLE_USER.password}</code><br />
+        Role: <code>{SAMPLE_USER.role}</code>
+      </div>
       <h2>{isRegistering ? "Register" : "Login"}</h2>
       <form onSubmit={handleSubmit}>
         <input

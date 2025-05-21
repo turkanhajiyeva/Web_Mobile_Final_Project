@@ -21,6 +21,11 @@ const Navbar = () => {
           <li>
             <Link to="/details">Details</Link>
           </li>
+          {user && (
+            <li>
+              <Link to="/staff">Staff Dashboard</Link>
+            </li>
+          )}
           <li className="loginstuff">
             <Link to="/login">Hello, {user ? user.username : "Please Log-In"}</Link>
           </li>
