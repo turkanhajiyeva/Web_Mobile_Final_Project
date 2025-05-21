@@ -1,5 +1,4 @@
 package com.ilpalazzo.service.impl;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -40,14 +39,14 @@ class OrderServiceImplTest {
 
         order1 = new Order();
         order1.setOrderId(1L);
-        order1.setTableId(UUID.randomUUID());
+        order1.setTableId(UUID.randomUUID().toString());
         order1.setOrderTime(LocalDateTime.now());
         order1.setTotalAmount(new BigDecimal("100.00"));
         order1.setStatus("pending");
 
         order2 = new Order();
         order2.setOrderId(2L);
-        order2.setTableId(UUID.randomUUID());
+        order2.setTableId(UUID.randomUUID().toString());
         order2.setOrderTime(LocalDateTime.now());
         order2.setTotalAmount(new BigDecimal("50.00"));
         order2.setStatus("ready");
