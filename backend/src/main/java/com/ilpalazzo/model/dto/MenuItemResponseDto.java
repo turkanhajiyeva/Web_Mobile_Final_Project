@@ -4,17 +4,17 @@ import java.math.BigDecimal;
 
 public class MenuItemResponseDto {
 
-    private Long id;
+    private int id;
     private String name;
     private String description;
     private BigDecimal price;
     private String category;
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

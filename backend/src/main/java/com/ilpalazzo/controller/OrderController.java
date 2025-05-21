@@ -4,6 +4,7 @@ import com.ilpalazzo.model.entity.Order;
 import com.ilpalazzo.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import com.ilpalazzo.rabbit.RabbitMQSender;
 import com.ilpalazzo.repository.OrderRepository;
@@ -14,7 +15,6 @@ import com.ilpalazzo.model.dto.OrderResponseDto;
 import com.ilpalazzo.service.MenuItemService;
 
 import java.util.List;
-import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -37,18 +37,18 @@ public class OrderController {
         try {
             // Convert DTO to entity
             Order order = OrderMapper.toEntity(orderRequest);
-            
+
             // Save order to database
             Order savedOrder = orderService.placeOrder(order);
-            
+
             // Send to RabbitMQ for async processing
             rabbitMQSender.send(savedOrder);
-            
+
             // Convert to response DTO with menu item details
             OrderResponseDto responseDto = OrderMapper.toResponse(savedOrder, menuItemService);
-            
-            // Return the saved order with its ID
-            return ResponseEntity.ok(responseDto);
+
+            // Return the saved order with CREATED status
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Failed to place order: " + e.getMessage());
         }
@@ -69,7 +69,7 @@ public class OrderController {
         orderService.deleteOrder(id);
         return ResponseEntity.noContent().build();
     }
-    
+
     @PutMapping("/{id}/status")
     public ResponseEntity<Order> updateOrderStatus(
         @PathVariable Long id,
@@ -83,10 +83,10 @@ public class OrderController {
         return ResponseEntity.ok(order);
     }
 
-    @GetMapping("/{id}/status/{status}")
+    @GetMapping("/status/{status}")
     public ResponseEntity<List<Order>> getOrdersByStatus(@PathVariable String status) {
-    List<Order> orders = orderRepository.findByStatus(status);
-    return ResponseEntity.ok(orders);
+        List<Order> orders = orderRepository.findByStatus(status);
+        return ResponseEntity.ok(orders);
     }
 
 }

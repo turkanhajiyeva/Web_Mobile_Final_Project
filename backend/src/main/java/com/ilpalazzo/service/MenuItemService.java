@@ -8,8 +8,8 @@ import java.util.List;
 public interface MenuItemService {
     MenuItemResponseDto createMenuItem(MenuItemRequestDto dto);
     List<MenuItemResponseDto> getAllMenuItems();
-    MenuItemResponseDto getMenuItemById(Long id);
+    MenuItemResponseDto getMenuItemById(int id);
     List<MenuItemResponseDto> getMenuItemByCategory(String category); 
-    MenuItemResponseDto updateMenuItem(Long id, MenuItemRequestDto dto);
-    void deleteMenuItem(Long id);
+    MenuItemResponseDto updateMenuItem(int id, MenuItemRequestDto dto);
+    void deleteMenuItem(int id);
 }

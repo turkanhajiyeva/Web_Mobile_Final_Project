@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class LoggingAspect {
 
-    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(LoggingAspect.class); //for disabling red line under log (it annoyed me)
+    //private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(LoggingAspect.class); //for disabling red line under log (it annoyed me) // use in your version no need to have 2 loggers
 
 
     @Before("execution(* com.ilpalazzo.controller.OrderController.*(..))")
