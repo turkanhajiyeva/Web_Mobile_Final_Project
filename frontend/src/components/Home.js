@@ -15,12 +15,15 @@ const Home = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const [selectedCategory, setSelectedCategory] = useState("All");
     const [showCart, setShowCart] = useState(false);
+    const [isTransitioning, setIsTransitioning] = useState(false);
     const itemsPerPage = 12;
     const { user } = useAuth();
     const { cartItems, total, addToCart, removeFromCart } = useCart();
 
     const fetchData = async () => {
         setLoading(true);
+        setIsTransitioning(true);
+
         try {
             let data;
             if (selectedCategory === 'All') {
@@ -28,6 +31,10 @@ const Home = () => {
             } else {
                 data = await MenuItemsService.getMenuItemsByCategory(selectedCategory);
             }
+
+            // Add a small delay to make the transition more noticeable
+            await new Promise(resolve => setTimeout(resolve, 300));
+
             setItems(data);
             setCurrentPage(0); // reset page when category changes
             setError(null);
@@ -36,6 +43,13 @@ const Home = () => {
             setError('Failed to load menu items. Please try again later.');
         } finally {
             setLoading(false);
+            setIsTransitioning(false);
+        }
+    };
+
+    const handleCategoryChange = (category) => {
+        if (category !== selectedCategory) {
+            setSelectedCategory(category);
         }
     };
 
@@ -72,10 +86,10 @@ const Home = () => {
                 <Carousel.Item>
                     <div className="d-flex align-items-center carousel-custom-height" style={{ backgroundColor: '#fff' }}>
                         <div className="col-md-6">
-                            <img 
-                            className="d-block w-100" 
-                            src={isMobile ? './images/ilpalazzo1.jpg' : './images/ilpalazzo.jpg'}
-                            alt="Chef Special" />
+                            <img
+                                className="d-block w-100"
+                                src={isMobile ? './images/ilpalazzo1.jpg' : './images/ilpalazzo.jpg'}
+                                alt="Chef Special" />
                         </div>
                         <div className="col-md-6 p-4">
                             <h2 className="fw-bold">A Taste of Italy, Reimagined at Il'Palazzo!</h2>
@@ -89,21 +103,20 @@ const Home = () => {
                 <Carousel.Item>
                     <div className="d-flex align-items-center carousel-custom-height" style={{ backgroundColor: '#fff' }}>
                         <div className="col-md-6">
-                            <img className="d-block w-100" 
-                            src={isMobile ? './images/menu1.jpg' : './images/menu.jpg'} 
-                            alt="Fresh Ingredients" />
+                            <img className="d-block w-100"
+                                 src={isMobile ? './images/menu1.jpg' : './images/menu.jpg'}
+                                 alt="Fresh Ingredients" />
                         </div>
                         <div className="col-md-6 p-4">
                             <h2 className="fw-bold">Il'Palazzo: A Menu Masterpiece Unveiled!</h2>
                             <p className="text-muted">
-                            Our culinary team has crafted an exquisite new menu, blending timeless Italian traditions with fresh, innovative flavors.
+                                Our culinary team has crafted an exquisite new menu, blending timeless Italian traditions with fresh, innovative flavors.
                             </p>
                             <button className="btn btn-miku">Explore Our Menu</button>
                         </div>
                     </div>
                 </Carousel.Item>
             </Carousel>
-
 
             {/* Division Line */}
             <div className="divline">
@@ -140,15 +153,16 @@ const Home = () => {
                         {['All', 'Main Courses', 'Drinks', 'Appetizers'].map(category => (
                             <li key={category}>
                                 <button
-                                    onClick={() => setSelectedCategory(category)}
+                                    onClick={() => handleCategoryChange(category)}
                                     className={`btn btn-link ${selectedCategory === category ? 'active-category' : ''}`}
+                                    disabled={isTransitioning}
                                 >
                                     {category}
                                 </button>
                             </li>
                         ))}
                     </ul>
-                    <div 
+                    <div
                         className='cart d-flex align-items-center justify-content-end pe-3'
                         onClick={() => setShowCart(!showCart)}
                         style={{ cursor: 'pointer' }}
@@ -165,8 +179,8 @@ const Home = () => {
                         <div className="cart-sidebar">
                             <div className="d-flex justify-content-between align-items-center mb-3">
                                 <h3>Your Cart</h3>
-                                <button 
-                                    className="btn btn-link" 
+                                <button
+                                    className="btn btn-link"
                                     onClick={() => setShowCart(false)}
                                 >
                                     <i className="bi bi-x-lg"></i>
@@ -177,15 +191,7 @@ const Home = () => {
                     </>
                 )}
 
-                {/* Loading and Error States */}
-                {loading && (
-                    <div className="loading-container">
-                        <div className="spinner-border text-primary" role="status">
-                            <span className="visually-hidden">Loading...</span>
-                        </div>
-                    </div>
-                )}
-
+                {/* Error State */}
                 {error && (
                     <div className="alert alert-danger" role="alert">
                         {error}
@@ -193,16 +199,15 @@ const Home = () => {
                 )}
 
                 {/* Menu Items Grid */}
-                {!loading && !error && (
-                    <MenuItemsGrid 
-                        items={items} 
-                        isMobile={isMobile}
-                        onAddToCart={addToCart}
-                        currentPage={currentPage}
-                        setCurrentPage={setCurrentPage}
-                        itemsPerPage={itemsPerPage}
-                    />
-                )}
+                <MenuItemsGrid
+                    items={items}
+                    isMobile={isMobile}
+                    onAddToCart={addToCart}
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                    itemsPerPage={itemsPerPage}
+                    isLoading={loading}
+                />
             </div>
         </>
     );
