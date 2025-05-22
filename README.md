@@ -1,4 +1,4 @@
-# Web & Mobile Final Project - Restaurant Ordering System
+# Web & Mobile Final Project - QR Code-based Restaurant Ordering System
 
 A full-stack restaurant ordering system with:
 
@@ -25,7 +25,7 @@ cd Web_Mobile_Final_Project
 
 ### 2. Backend (Spring Boot)
 
-- Ensure you have **Java 17+** and **Gradle** installed.
+- Ensure you have **Java 17** and **Gradle** installed.
 - Create a PostgreSQL database named `ilpalazzo`.
 - Update credentials in `backend/src/main/resources/application.properties` if needed.
 
@@ -33,7 +33,6 @@ cd Web_Mobile_Final_Project
 
 ```bash
 cd backend
-./gradlew build
 ./gradlew bootRun
 ```
 
@@ -58,7 +57,7 @@ npm run start
 
 - PostgreSQL database `ilpalazzo`
 - RabbitMQ broker running on default ports
-- Java 17+, Gradle
+- Java 17, Gradle
 - Node.js & npm
 
 ## Configuration
