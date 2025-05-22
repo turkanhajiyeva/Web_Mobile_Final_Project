@@ -1,7 +1,5 @@
 package com.ilpalazzo.model.dto;
 
-import java.util.UUID;
-
 public class TableInformationRequestDto {
 
     private String tableName;

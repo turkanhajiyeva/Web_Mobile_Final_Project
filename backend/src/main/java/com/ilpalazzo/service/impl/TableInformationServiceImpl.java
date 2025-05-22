@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class TableInformationServiceImpl implements TableInformationService {
@@ -31,7 +30,7 @@ public class TableInformationServiceImpl implements TableInformationService {
     }
 
     @Override
-    public TableInformation getTableInformationById(UUID tableId) {
+    public TableInformation getTableInformationById(String tableId) {
         return tableInformationRepository.findById(tableId)
                 .orElseThrow(() -> new TableInformationNotFoundException(tableId));
     }
@@ -43,7 +42,7 @@ public class TableInformationServiceImpl implements TableInformationService {
     }
 
     @Override
-    public void deleteTableInformation(UUID tableId) {
+    public void deleteTableInformation(String tableId) {
         if (!tableInformationRepository.existsById(tableId)) {
             throw new TableInformationNotFoundException(tableId);
         }
@@ -51,7 +50,7 @@ public class TableInformationServiceImpl implements TableInformationService {
     }
 
     @Override
-    public TableInformation updateTableInformation(UUID tableId, TableInformation updatedTableInformation) {
+    public TableInformation updateTableInformation(String tableId, TableInformation updatedTableInformation) {
         TableInformation existing = getTableInformationById(tableId);
 
         existing.setTableName(updatedTableInformation.getTableName());

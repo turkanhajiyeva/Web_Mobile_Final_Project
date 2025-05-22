@@ -26,7 +26,6 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -49,14 +48,13 @@ class OrderControllerIntegrationTest {
     private MenuItemRepository menuItemRepository;
 
     @MockBean
-    private RabbitTemplate rabbitTemplate; // ✅ Mocked
+    private RabbitTemplate rabbitTemplate;
 
     @BeforeEach
     void cleanUp() {
         orderRepository.deleteAll();
         menuItemRepository.deleteAll();
 
-    // Disambiguated version
         doNothing().when(rabbitTemplate).convertAndSend(
             any(String.class),
             any(String.class),
@@ -79,6 +77,7 @@ class OrderControllerIntegrationTest {
 
         OrderRequestDto request = new OrderRequestDto();
         request.setTableId(UUID.randomUUID().toString());
+        request.setUserId(UUID.randomUUID().toString()); // ✅ Set userId
         request.setItems(List.of(orderItem));
 
         mockMvc.perform(post("/api/orders")
@@ -86,6 +85,7 @@ class OrderControllerIntegrationTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.tableId").value(request.getTableId()))
+                .andExpect(jsonPath("$.userId").value(request.getUserId())) // ✅ Added check
                 .andExpect(jsonPath("$.items[0].menuItemId").value(savedItem.getId()))
                 .andExpect(jsonPath("$.items[0].quantity").value(2));
     }
@@ -101,6 +101,7 @@ class OrderControllerIntegrationTest {
     void deleteOrder_shouldRemoveOrder() throws Exception {
         Order order = new Order();
         order.setTableId("test-table");
+        order.setUserId("user-123"); // ✅ Set userId
         order.setStatus("pending");
         Order saved = orderRepository.save(order);
 
@@ -114,6 +115,7 @@ class OrderControllerIntegrationTest {
     void updateOrderStatus_shouldModifyStatus() throws Exception {
         Order order = new Order();
         order.setTableId("test-table");
+        order.setUserId("user-123"); // ✅ Set userId
         order.setStatus("pending");
         Order saved = orderRepository.save(order);
 
@@ -128,23 +130,26 @@ class OrderControllerIntegrationTest {
     void getOrderById_shouldReturnOrder() throws Exception {
         Order order = new Order();
         order.setTableId("sample-table");
+        order.setUserId("user-abc"); 
         order.setStatus("pending");
         Order saved = orderRepository.save(order);
 
         mockMvc.perform(get("/api/orders/" + saved.getOrderId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.tableId").value("sample-table"));
+                .andExpect(jsonPath("$.tableId").value("sample-table"))
+                .andExpect(jsonPath("$.userId").value("user-abc")); // ✅ Added check
     }
 
     @Test
     void getOrdersByStatus_shouldReturnMatchingOrders() throws Exception {
         Order order = new Order();
         order.setTableId("table-xyz");
+        order.setUserId("user-xyz"); 
         order.setStatus("processing");
-        Order saved = orderRepository.save(order);
+        orderRepository.save(order);
 
         mockMvc.perform(get("/api/orders/status/processing")) 
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.length()").value(1));
-        }
+    }
 }
