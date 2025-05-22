@@ -1,33 +1,45 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
+import { useAuth } from '../context/AuthContext';
 
-const WebSocketClient = () => {
+const WebSocketNotifs = () => {
+  const { user } = useAuth(); // user.userId must be available
+  const clientRef = useRef(null);
+
   useEffect(() => {
+    if (!user?.userid) {
+      console.log("Current user:", user);
+      console.log("WebSocket not connected: user ID is not available yet.");
+      return;
+    }
+    console.log("Current user:", user);
     const socket = new SockJS('http://localhost:8080/ws');
     const stompClient = new Client({
       webSocketFactory: () => socket,
+      reconnectDelay: 5000,
       onConnect: () => {
-        console.log('Connected to WebSocket');
+        console.log('WebSocket connected');
 
-        stompClient.subscribe('/topic/notifications', (message) => {
+        stompClient.subscribe(`/topic/notifications/${user.userid}`, (message) => {
           const body = JSON.parse(message.body);
-          alert(`New Order Notification:\n${body.message}`);
+          alert(`🔔 New Order Notification:\n${body.message}`);
         });
       },
       onStompError: (frame) => {
-        console.error('WebSocket error', frame);
-      }
+        console.error('STOMP error', frame);
+      },
     });
 
+    clientRef.current = stompClient;
     stompClient.activate();
 
     return () => {
-      if (stompClient) stompClient.deactivate();
+      clientRef.current?.deactivate();
     };
-  }, []);
+  }, [user?.userid]); // re-run only when userId is available
 
-  return null; 
+  return null;
 };
 
-export default WebSocketClient;
+export default WebSocketNotifs;

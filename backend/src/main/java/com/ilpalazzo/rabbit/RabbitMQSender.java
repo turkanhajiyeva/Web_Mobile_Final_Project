@@ -10,6 +10,7 @@ public class RabbitMQSender {
 
     private final RabbitTemplate rabbitTemplate;
 
+
     @Value("${sample.rabbitmq.exchange}")
     private String exchange;
 
@@ -21,6 +22,15 @@ public class RabbitMQSender {
     }
 
     public void sendNotification(OrderNotificationDto notification) {
+        if (notification == null ||
+        notification.getOrderId() == null ||
+        notification.getUserId() == null ||
+        notification.getStatus() == null) 
+        {
+        System.err.println("❌ Notification is missing required fields. Not sending to RabbitMQ.");
+        return;
+        }
+
         rabbitTemplate.convertAndSend(exchange, routingKey, notification);
     }
 }

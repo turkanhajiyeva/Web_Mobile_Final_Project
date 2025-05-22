@@ -13,7 +13,6 @@ const Cart = () => {
     if (cartItems.length === 0) return;
     setIsSubmitting(true);
     try {
-      // Get table ID from URL if present
       const params = new URLSearchParams(window.location.search);
       const urlTableId = params.get("table_id");
       const resolvedTableId = urlTableId || tableNumber.trim();
@@ -21,7 +20,10 @@ const Cart = () => {
         setOrderStatus("error");
         throw new Error("Table number is required to place an order.");
       }
+      console.log("User object:", user);
+
       const orderData = {
+        userId: user?.userid,
         tableId: resolvedTableId,
         items: cartItems.map(item => ({
           menuItemId: item.id,
@@ -29,6 +31,7 @@ const Cart = () => {
         })),
         totalAmount: total
       };
+      console.log("Order Data:", orderData);
       const response = await fetch("http://localhost:8080/api/orders", {
         method: "POST",
         headers: {
@@ -41,9 +44,9 @@ const Cart = () => {
         setOrderStatus("success");
         clearCart();
         // Redirect to order status page after 2 seconds
-        setTimeout(() => {
-          window.location.href = `/details?order_id=${responseData.orderId}`;
-        }, 2000);
+        // setTimeout(() => {
+        //   window.location.href = `/details?order_id=${responseData.orderId}`;
+        // }, 2000);
       } else {
         setOrderStatus("error");
         throw new Error(responseData.message || "Failed to place order");
