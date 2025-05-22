@@ -1,8 +1,8 @@
-A full-stack restaurant ordering system with:
+*A full-stack restaurant ordering system with:
 
-Frontend (React): Customer-facing menu, cart, and kitchen staff dashboards.
+**rontend (React): Customer-facing menu, cart, and kitchen staff dashboards.
 
-Backend (Spring Boot + Gradle): REST APIs, PostgreSQL persistence, RabbitMQ messaging.
+**Backend (Spring Boot + Gradle): REST APIs, PostgreSQL persistence, RabbitMQ messaging.
 
 🗂️ Project Structure
 
