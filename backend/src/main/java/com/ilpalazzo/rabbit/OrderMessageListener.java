@@ -1,28 +1,22 @@
 package com.ilpalazzo.rabbit;
 
-import com.ilpalazzo.model.entity.Order;
-import com.ilpalazzo.repository.OrderRepository;
+import com.ilpalazzo.model.dto.OrderNotificationDto;
+import com.ilpalazzo.notifsender.NotificationWebSocketSender;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 @Component
 public class OrderMessageListener {
 
-    private final OrderRepository orderRepository;
+    private final NotificationWebSocketSender webSocketSender;
 
-    public OrderMessageListener(OrderRepository orderRepository) {
-        this.orderRepository = orderRepository;
+    public OrderMessageListener(NotificationWebSocketSender webSocketSender) {
+        this.webSocketSender = webSocketSender;
     }
 
     @RabbitListener(queues = "${sample.rabbitmq.queue}")
-    public void receiveOrder(Order order) {
-        try {
-            System.out.println("Received order: " + order);
-            orderRepository.save(order);
-            System.out.println("Order saved to database.");
-        } catch (Exception e) {
-            System.err.println("Failed to save order: " + e.getMessage());
-            e.printStackTrace();
-        }
+    public void receiveNotification(OrderNotificationDto notification) {
+        System.out.println("Received: " + notification);
+        webSocketSender.sendToUser(notification.getUserId(), notification);
     }
 }

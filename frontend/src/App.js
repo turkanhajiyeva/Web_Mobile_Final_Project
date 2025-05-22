@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import WebSocketNotifs from './components/WebSocketNotifs';
 import Navbar from './components/Navbar';
 import Home from './components/Home';
 import Login from './components/Login';
@@ -17,6 +18,7 @@ function App() {
     <AuthProvider>
       <CartProvider>
         <Router>
+          <WebSocketNotifs />
           <Navbar />
           <Routes>
             <Route path='/' element={<Home />} />

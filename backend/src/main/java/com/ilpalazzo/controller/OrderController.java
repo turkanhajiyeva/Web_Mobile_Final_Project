@@ -10,6 +10,7 @@ import com.ilpalazzo.rabbit.RabbitMQSender;
 import com.ilpalazzo.repository.OrderRepository;
 import java.util.Map;
 import com.ilpalazzo.model.dto.OrderRequestDto;
+import com.ilpalazzo.model.dto.OrderNotificationDto;
 import com.ilpalazzo.mapper.*;
 import com.ilpalazzo.model.dto.OrderResponseDto;
 import com.ilpalazzo.service.MenuItemService;
@@ -41,8 +42,15 @@ public class OrderController {
             // Save order to database
             Order savedOrder = orderService.placeOrder(order);
 
-            // Send to RabbitMQ for async processing
-            rabbitMQSender.send(savedOrder);
+            // May god bless this code and make it work
+            OrderNotificationDto notification = new OrderNotificationDto();
+                    notification.setOrderId(savedOrder.getOrderId());
+                    notification.setUserId(savedOrder.getUserId());
+                    notification.setStatus(savedOrder.getStatus());
+                    notification.setMessage("Your order is now being prepared!");
+
+            // Send to RabbitMQ for async processing //ig order can be processed itself notif will need rabbit tho
+            rabbitMQSender.sendNotification(notification);
 
             // Convert to response DTO with menu item details
             OrderResponseDto responseDto = OrderMapper.toResponse(savedOrder, menuItemService);

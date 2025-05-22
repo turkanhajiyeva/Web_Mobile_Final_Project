@@ -1,6 +1,7 @@
 package com.ilpalazzo.rabbit;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import com.ilpalazzo.model.dto.OrderNotificationDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +20,7 @@ public class RabbitMQSender {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void send(Object message) {
-        System.out.println("Sending message to RabbitMQ: " + message);
-        rabbitTemplate.convertAndSend(exchange, routingKey, message);
+    public void sendNotification(OrderNotificationDto notification) {
+        rabbitTemplate.convertAndSend(exchange, routingKey, notification);
     }
 }
