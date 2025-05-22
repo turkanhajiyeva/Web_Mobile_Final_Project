@@ -56,7 +56,7 @@ const Home = () => {
                         <div className="col-md-6">
                             <img
                                 className="d-block w-100"
-                                src={isMobile ? './images/MikuPizza.jpg' : './images/MikuPizza.jpg'}
+                                src={isMobile ? './images/arizonapizza1.png' : './images/arizonapizza.png'}
                                 alt="Delicious Pizza"
                             />
                         </div>
@@ -72,12 +72,15 @@ const Home = () => {
                 <Carousel.Item>
                     <div className="d-flex align-items-center carousel-custom-height" style={{ backgroundColor: '#fff' }}>
                         <div className="col-md-6">
-                            <img className="d-block w-100" src="./images/horsin_around.jpg" alt="Chef Special" />
+                            <img 
+                            className="d-block w-100" 
+                            src={isMobile ? './images/ilpalazzo1.jpg' : './images/ilpalazzo.jpg'}
+                            alt="Chef Special" />
                         </div>
                         <div className="col-md-6 p-4">
-                            <h2 className="fw-bold">Meet Our Star Chef!</h2>
+                            <h2 className="fw-bold">A Taste of Italy, Reimagined at Il'Palazzo!</h2>
                             <p className="text-muted">
-                                Our culinary experts craft meals with passion. Try our chef’s special today!
+                                Savor the rich traditions and exciting innovations of our new Italian menu, all within our beautifully transformed trattoria.
                             </p>
                             <button className="btn btn-miku">View Specials</button>
                         </div>
@@ -86,12 +89,14 @@ const Home = () => {
                 <Carousel.Item>
                     <div className="d-flex align-items-center carousel-custom-height" style={{ backgroundColor: '#fff' }}>
                         <div className="col-md-6">
-                            <img className="d-block w-100" src={isMobile ? './images/kekw.jpg' : './images/Bocchi.jpg'} alt="Fresh Ingredients" />
+                            <img className="d-block w-100" 
+                            src={isMobile ? './images/menu1.jpg' : './images/menu.jpg'} 
+                            alt="Fresh Ingredients" />
                         </div>
                         <div className="col-md-6 p-4">
-                            <h2 className="fw-bold">Fresh Ingredients, Amazing Taste!</h2>
+                            <h2 className="fw-bold">Il'Palazzo: A Menu Masterpiece Unveiled!</h2>
                             <p className="text-muted">
-                                We use only the freshest ingredients to create unforgettable flavors.
+                            Our culinary team has crafted an exquisite new menu, blending timeless Italian traditions with fresh, innovative flavors.
                             </p>
                             <button className="btn btn-miku">Explore Our Menu</button>
                         </div>
