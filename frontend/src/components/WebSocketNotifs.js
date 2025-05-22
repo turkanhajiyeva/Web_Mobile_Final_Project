@@ -4,7 +4,7 @@ import { Client } from '@stomp/stompjs';
 import { useAuth } from '../context/AuthContext';
 
 const WebSocketNotifs = () => {
-  const { user } = useAuth(); // user.userId must be available
+  const { user } = useAuth();
   const clientRef = useRef(null);
 
   useEffect(() => {

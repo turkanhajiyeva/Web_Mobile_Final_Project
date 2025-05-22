@@ -24,13 +24,15 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/logininfo/authenticate", "/api/logininfo").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/menuitems/**").permitAll() 
+                .requestMatchers(HttpMethod.POST, "/api/logininfo").permitAll()   // Allow POST for registration
+                .requestMatchers("/api/logininfo/authenticate").permitAll()       // Allow authenticate (POST)
+                .requestMatchers(HttpMethod.GET, "/**").permitAll()                // Allow GET everywhere
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
+
 
     // Provide AuthenticationManager bean if needed elsewhere
     @Bean
