@@ -1,15 +1,14 @@
 package com.ilpalazzo.model.entity;
 
 import jakarta.persistence.*;
-import java.util.UUID;
 
 @Entity
 @Table(name = "table_information")
 public class TableInformation {
 
     @Id
-    @Column(name = "table_id", columnDefinition = "String")
-    private UUID tableId;
+    @Column(name = "table_id", nullable = false)
+    private String tableId;
 
     @Column(name = "table_name", length = 50, nullable = false)
     private String tableName;
@@ -17,11 +16,11 @@ public class TableInformation {
     @Column(name = "qr_code_url", length = 255)
     private String qrCodeUrl;
 
-    public UUID getTableId() {
+    public String getTableId() {
         return tableId;
     }
 
-    public void setTableId(UUID tableId) {
+    public void setTableId(String tableId) {
         this.tableId = tableId;
     }
 

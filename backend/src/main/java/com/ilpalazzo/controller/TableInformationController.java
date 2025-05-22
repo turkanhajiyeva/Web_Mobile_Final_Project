@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/tableinformation")
@@ -28,7 +27,7 @@ public class TableInformationController {
     }
 
     @GetMapping("/{tableId}")
-    public ResponseEntity<TableInformation> getTableInformationById(@PathVariable UUID tableId) {
+    public ResponseEntity<TableInformation> getTableInformationById(@PathVariable String tableId) {
         return ResponseEntity.ok(tableInformationService.getTableInformationById(tableId));
     }
 
@@ -39,14 +38,14 @@ public class TableInformationController {
 
 
     @DeleteMapping("/{tableId}")
-    public ResponseEntity<Void> deleteTableInformation(@PathVariable UUID tableId) {
+    public ResponseEntity<Void> deleteTableInformation(@PathVariable String tableId) {
         tableInformationService.deleteTableInformation(tableId);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{tableId}")
     public ResponseEntity<TableInformation> updateTableInformation(
-            @PathVariable UUID tableId,
+            @PathVariable String tableId,
             @RequestBody TableInformation updatedTableInformation) {
         TableInformation updated = tableInformationService.updateTableInformation(tableId, updatedTableInformation);
         return ResponseEntity.ok(updated);

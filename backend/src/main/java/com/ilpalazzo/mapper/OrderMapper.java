@@ -70,6 +70,7 @@ public class OrderMapper {
         OrderResponseDto dto = new OrderResponseDto();
         dto.setOrderId(order.getOrderId());
         dto.setTableId(order.getTableId());
+        dto.setUserId(order.getUserId());  // <-- Added this line
         dto.setOrderTime(order.getOrderTime());
         dto.setStatus(order.getStatus());
         dto.setTotalAmount(order.getTotalAmount());

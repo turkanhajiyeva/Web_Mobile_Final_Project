@@ -2,13 +2,14 @@ package com.ilpalazzo.service.impl;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import static org.mockito.ArgumentMatchers.any;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -35,7 +36,7 @@ class TableInformationServiceImplTest {
 
     @Test
     void createTableInformation_shouldReturnSavedEntity() {
-        UUID id = UUID.randomUUID();
+        String id = "table-123";
         TableInformation table = new TableInformation();
         table.setTableId(id);
         table.setTableName("A1");
@@ -53,11 +54,11 @@ class TableInformationServiceImplTest {
     @Test
     void getAllTableInformation_shouldReturnList() {
         TableInformation t1 = new TableInformation();
-        t1.setTableId(UUID.randomUUID());
+        t1.setTableId("table-1");
         t1.setTableName("A1");
 
         TableInformation t2 = new TableInformation();
-        t2.setTableId(UUID.randomUUID());
+        t2.setTableId("table-2");
         t2.setTableName("B2");
 
         when(tableInformationRepository.findAll()).thenReturn(List.of(t1, t2));
@@ -70,7 +71,7 @@ class TableInformationServiceImplTest {
 
     @Test
     void getTableInformationById_shouldReturnEntity() {
-        UUID id = UUID.randomUUID();
+        String id = "table-123";
         TableInformation table = new TableInformation();
         table.setTableId(id);
         table.setTableName("C3");
@@ -85,7 +86,7 @@ class TableInformationServiceImplTest {
 
     @Test
     void getTableInformationById_whenNotFound_shouldThrowException() {
-        UUID id = UUID.randomUUID();
+        String id = "table-123";
         when(tableInformationRepository.findById(id)).thenReturn(Optional.empty());
 
         assertThrows(TableInformationNotFoundException.class,
@@ -95,7 +96,7 @@ class TableInformationServiceImplTest {
     @Test
     void getTableInformationByTableName_shouldReturnEntity() {
         TableInformation table = new TableInformation();
-        table.setTableId(UUID.randomUUID());
+        table.setTableId("table-456");
         table.setTableName("VIP");
 
         when(tableInformationRepository.findByTableName("VIP")).thenReturn(Optional.of(table));
@@ -115,7 +116,7 @@ class TableInformationServiceImplTest {
 
     @Test
     void deleteTableInformation_shouldCallDelete() {
-        UUID id = UUID.randomUUID();
+        String id = "table-123";
         when(tableInformationRepository.existsById(id)).thenReturn(true);
 
         tableInformationService.deleteTableInformation(id);
@@ -125,7 +126,7 @@ class TableInformationServiceImplTest {
 
     @Test
     void deleteTableInformation_whenNotFound_shouldThrowException() {
-        UUID id = UUID.randomUUID();
+        String id = "table-123";
         when(tableInformationRepository.existsById(id)).thenReturn(false);
 
         assertThrows(TableInformationNotFoundException.class,
@@ -134,7 +135,7 @@ class TableInformationServiceImplTest {
 
     @Test
     void updateTableInformation_shouldUpdateAndReturnEntity() {
-        UUID id = UUID.randomUUID();
+        String id = "table-123";
 
         TableInformation existing = new TableInformation();
         existing.setTableId(id);

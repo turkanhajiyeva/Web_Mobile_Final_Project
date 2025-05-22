@@ -3,7 +3,6 @@ package com.ilpalazzo.service;
 import com.ilpalazzo.model.entity.TableInformation;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface TableInformationService {
 
@@ -11,12 +10,12 @@ public interface TableInformationService {
 
     List<TableInformation> getAllTableInformation();
 
-    TableInformation getTableInformationById(UUID tableId);
+    TableInformation getTableInformationById(String tableId);
 
     TableInformation getTableInformationByTableName(String tableName);
 
-    void deleteTableInformation(UUID tableId);
+    void deleteTableInformation(String tableId);
 
-    TableInformation updateTableInformation(UUID tableId, TableInformation updatedTableInformation);
+    TableInformation updateTableInformation(String tableId, TableInformation updatedTableInformation);
 
 }

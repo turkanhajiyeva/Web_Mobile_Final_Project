@@ -1,18 +1,16 @@
 package com.ilpalazzo.model.dto;
 
-import java.util.UUID;
-
 public class TableInformationResponseDto {
 
-    private UUID tableId;
+    private String tableId;
     private String tableName;
     private String qrCodeUrl;
 
-    public UUID getTableId() {
+    public String getTableId() {
         return tableId;
     }
 
-    public void setTableId(UUID tableId) {
+    public void setTableId(String tableId) {
         this.tableId = tableId;
     }
 

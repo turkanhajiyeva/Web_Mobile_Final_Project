@@ -16,7 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -44,7 +43,7 @@ class TableInformationControllerIntegrationTest {
     @Test
     void createTableInformation_shouldReturnCreated() throws Exception {
         TableInformation table = new TableInformation();
-        table.setTableId(UUID.randomUUID());
+        table.setTableId("table-123");
         table.setTableName("Test Table");
         table.setQrCodeUrl("http://example.com/qr");
 
@@ -59,12 +58,12 @@ class TableInformationControllerIntegrationTest {
     @Test
     void getAllTableInformation_shouldReturnList() throws Exception {
         TableInformation t1 = new TableInformation();
-        t1.setTableId(UUID.randomUUID());
+        t1.setTableId("table-1");
         t1.setTableName("Table A");
         t1.setQrCodeUrl("");
 
         TableInformation t2 = new TableInformation();
-        t2.setTableId(UUID.randomUUID());
+        t2.setTableId("table-2");
         t2.setTableName("Table B");
         t2.setQrCodeUrl("");
 
@@ -78,13 +77,14 @@ class TableInformationControllerIntegrationTest {
     @Test
     void getTableInformationById_shouldReturnTable() throws Exception {
         TableInformation t = new TableInformation();
-        t.setTableId(UUID.randomUUID());
+        String id = "table-123";
+        t.setTableId(id);
         t.setTableName("Specific Table");
         t.setQrCodeUrl("http://qr.url");
 
         tableInformationRepository.save(t);
 
-        mockMvc.perform(get("/api/tableinformation/" + t.getTableId()))
+        mockMvc.perform(get("/api/tableinformation/" + id))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.tableName").value("Specific Table"));
     }
@@ -92,7 +92,8 @@ class TableInformationControllerIntegrationTest {
     @Test
     void getTableInformationByTableName_shouldReturnTable() throws Exception {
         TableInformation t = new TableInformation();
-        t.setTableId(UUID.randomUUID());
+        String id = "table-456";
+        t.setTableId(id);
         t.setTableName("UniqueName");
         t.setQrCodeUrl("http://qr.url");
 
@@ -100,13 +101,13 @@ class TableInformationControllerIntegrationTest {
 
         mockMvc.perform(get("/api/tableinformation/tableName/UniqueName"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.tableId").value(t.getTableId().toString()));
+                .andExpect(jsonPath("$.tableId").value(id));
     }
 
     @Test
     void updateTableInformation_shouldUpdateSuccessfully() throws Exception {
         TableInformation t = new TableInformation();
-        UUID id = UUID.randomUUID();
+        String id = "table-789";
         t.setTableId(id);
         t.setTableName("Old Name");
         t.setQrCodeUrl("");
@@ -129,7 +130,7 @@ class TableInformationControllerIntegrationTest {
     @Test
     void deleteTableInformation_shouldDeleteSuccessfully() throws Exception {
         TableInformation t = new TableInformation();
-        UUID id = UUID.randomUUID();
+        String id = "table-999";
         t.setTableId(id);
         t.setTableName("To Be Deleted");
         t.setQrCodeUrl("");

@@ -1,4 +1,5 @@
 package com.ilpalazzo.service.impl;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -39,6 +40,7 @@ class OrderServiceImplTest {
 
         order1 = new Order();
         order1.setOrderId(1L);
+        order1.setUserId("user-1234567890abcdef");   // <-- set userId here
         order1.setTableId(UUID.randomUUID().toString());
         order1.setOrderTime(LocalDateTime.now());
         order1.setTotalAmount(new BigDecimal("100.00"));
@@ -46,6 +48,7 @@ class OrderServiceImplTest {
 
         order2 = new Order();
         order2.setOrderId(2L);
+        order2.setUserId("user-abcdef1234567890");   // <-- set userId here
         order2.setTableId(UUID.randomUUID().toString());
         order2.setOrderTime(LocalDateTime.now());
         order2.setTotalAmount(new BigDecimal("50.00"));
@@ -60,6 +63,7 @@ class OrderServiceImplTest {
 
         assertNotNull(result);
         assertEquals(order1.getOrderId(), result.getOrderId());
+        assertEquals(order1.getUserId(), result.getUserId());  // verify userId
         verify(orderRepository, times(1)).save(order1);
     }
 
@@ -71,6 +75,10 @@ class OrderServiceImplTest {
         List<Order> result = orderService.getAllOrders();
 
         assertEquals(2, result.size());
+        // verify userId on the returned orders
+        assertEquals(order1.getUserId(), result.get(0).getUserId());
+        assertEquals(order2.getUserId(), result.get(1).getUserId());
+
         verify(orderRepository, times(1)).findAll();
     }
 
@@ -82,6 +90,7 @@ class OrderServiceImplTest {
 
         assertNotNull(result);
         assertEquals(order1.getOrderId(), result.getOrderId());
+        assertEquals(order1.getUserId(), result.getUserId());
     }
 
     @Test
@@ -111,6 +120,7 @@ class OrderServiceImplTest {
     void updateOrderStatus_shouldUpdateAndReturnUpdatedOrder() {
         Order updatedOrder = new Order();
         updatedOrder.setOrderId(1L);
+        updatedOrder.setUserId(order1.getUserId()); // keep same userId
         updatedOrder.setStatus("ready");
 
         when(orderRepository.findById(1L)).thenReturn(Optional.of(order1));
@@ -119,6 +129,7 @@ class OrderServiceImplTest {
         Order result = orderService.updateOrderStatus(1L, "ready");
 
         assertEquals("ready", result.getStatus());
+        assertEquals(order1.getUserId(), result.getUserId()); // verify userId unchanged
         verify(orderRepository, times(1)).save(any(Order.class));
     }
 
