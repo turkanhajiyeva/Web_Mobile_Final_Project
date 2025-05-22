@@ -16,9 +16,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -31,8 +40,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(classes = ilpalazzoApplication.class)
+@Import(OrderControllerIntegrationTest.TestSecurityConfig.class)
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
+@Transactional
+@ComponentScan(
+    excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = com.ilpalazzo.security.SecurityConfig.class)
+)
 class OrderControllerIntegrationTest {
 
     @Autowired
@@ -62,6 +76,7 @@ class OrderControllerIntegrationTest {
         );
     }
 
+    @WithMockUser(username = "testuser", roles = {"USER"})
     @Test
     void placeOrder_shouldReturnOrderResponseDto() throws Exception {
         MenuItem menuItem = new MenuItem();
@@ -77,7 +92,7 @@ class OrderControllerIntegrationTest {
 
         OrderRequestDto request = new OrderRequestDto();
         request.setTableId(UUID.randomUUID().toString());
-        request.setUserId(UUID.randomUUID().toString()); // ✅ Set userId
+        request.setUserId(UUID.randomUUID().toString());
         request.setItems(List.of(orderItem));
 
         mockMvc.perform(post("/api/orders")
@@ -85,11 +100,12 @@ class OrderControllerIntegrationTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.tableId").value(request.getTableId()))
-                .andExpect(jsonPath("$.userId").value(request.getUserId())) // ✅ Added check
+                .andExpect(jsonPath("$.userId").value(request.getUserId()))
                 .andExpect(jsonPath("$.items[0].menuItemId").value(savedItem.getId()))
                 .andExpect(jsonPath("$.items[0].quantity").value(2));
     }
 
+    @WithMockUser(username = "testuser", roles = {"USER"})
     @Test
     void getAllOrders_shouldReturnEmptyInitially() throws Exception {
         mockMvc.perform(get("/api/orders"))
@@ -97,11 +113,12 @@ class OrderControllerIntegrationTest {
                 .andExpect(content().json("[]"));
     }
 
+    @WithMockUser(username = "testuser", roles = {"USER"})
     @Test
     void deleteOrder_shouldRemoveOrder() throws Exception {
         Order order = new Order();
         order.setTableId("test-table");
-        order.setUserId("user-123"); // ✅ Set userId
+        order.setUserId("user-123");
         order.setStatus("pending");
         Order saved = orderRepository.save(order);
 
@@ -111,11 +128,12 @@ class OrderControllerIntegrationTest {
         assertThat(orderRepository.findById(saved.getOrderId())).isEmpty();
     }
 
+    @WithMockUser(username = "testuser", roles = {"USER"})
     @Test
     void updateOrderStatus_shouldModifyStatus() throws Exception {
         Order order = new Order();
         order.setTableId("test-table");
-        order.setUserId("user-123"); // ✅ Set userId
+        order.setUserId("user-123");
         order.setStatus("pending");
         Order saved = orderRepository.save(order);
 
@@ -126,30 +144,44 @@ class OrderControllerIntegrationTest {
                 .andExpect(jsonPath("$.status").value("completed"));
     }
 
+    @WithMockUser(username = "testuser", roles = {"USER"})
     @Test
     void getOrderById_shouldReturnOrder() throws Exception {
         Order order = new Order();
         order.setTableId("sample-table");
-        order.setUserId("user-abc"); 
+        order.setUserId("user-abc");
         order.setStatus("pending");
         Order saved = orderRepository.save(order);
 
         mockMvc.perform(get("/api/orders/" + saved.getOrderId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.tableId").value("sample-table"))
-                .andExpect(jsonPath("$.userId").value("user-abc")); // ✅ Added check
+                .andExpect(jsonPath("$.userId").value("user-abc"));
     }
 
+    @WithMockUser(username = "testuser", roles = {"USER"})
     @Test
     void getOrdersByStatus_shouldReturnMatchingOrders() throws Exception {
         Order order = new Order();
         order.setTableId("table-xyz");
-        order.setUserId("user-xyz"); 
+        order.setUserId("user-xyz");
         order.setStatus("processing");
         orderRepository.save(order);
 
-        mockMvc.perform(get("/api/orders/status/processing")) 
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.length()").value(1));
+        mockMvc.perform(get("/api/orders/status/processing"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1));
+    }
+
+    @Configuration
+    static class TestSecurityConfig {
+
+        @Bean
+        public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+            http
+                .csrf().disable()
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
+            return http.build();
+        }
     }
 }

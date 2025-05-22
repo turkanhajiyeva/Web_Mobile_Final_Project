@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.ilpalazzo.model.entity.MenuItem;
 
-public interface MenuItemRepository extends JpaRepository<MenuItem, Long> {
+public interface MenuItemRepository extends JpaRepository <MenuItem, Integer> {
     Optional<MenuItem> findByName(String name);
     List<MenuItem> findByCategory(String category);
     Optional<MenuItem> findById(int id);

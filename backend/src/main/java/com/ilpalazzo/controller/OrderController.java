@@ -2,6 +2,7 @@ package com.ilpalazzo.controller;
 
 import com.ilpalazzo.model.entity.Order;
 import com.ilpalazzo.service.OrderService;
+import com.ilpalazzo.service.OrderStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,9 @@ public class OrderController {
     private OrderService orderService;
 
     @Autowired
+    private OrderStatusService orderStatusService;
+
+    @Autowired
     private RabbitMQSender rabbitMQSender;
 
     @Autowired
@@ -36,26 +40,19 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<?> placeOrder(@RequestBody OrderRequestDto orderRequest) {
         try {
-            // Convert DTO to entity
             Order order = OrderMapper.toEntity(orderRequest);
-
-            // Save order to database
             Order savedOrder = orderService.placeOrder(order);
 
-            // May god bless this code and make it work
             OrderNotificationDto notification = new OrderNotificationDto();
-                    notification.setOrderId(savedOrder.getOrderId());
-                    notification.setUserId(savedOrder.getUserId());
-                    notification.setStatus(savedOrder.getStatus());
-                    notification.setMessage("Your order is now being prepared!");
+            notification.setOrderId(savedOrder.getOrderId());
+            notification.setUserId(savedOrder.getUserId());
+            notification.setStatus(savedOrder.getStatus());
+            notification.setMessage("Your order is now being prepared!");
 
-            // Send to RabbitMQ for async processing //ig order can be processed itself notif will need rabbit tho
             rabbitMQSender.sendNotification(notification);
 
-            // Convert to response DTO with menu item details
             OrderResponseDto responseDto = OrderMapper.toResponse(savedOrder, menuItemService);
 
-            // Return the saved order with CREATED status
             return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Failed to place order: " + e.getMessage());
@@ -84,11 +81,10 @@ public class OrderController {
         @RequestBody Map<String, String> body) {
 
         String newStatus = body.get("status");
-        Order order = orderRepository.findById(id).orElseThrow();
-        order.setStatus(newStatus);
-        orderRepository.save(order);
+        orderStatusService.updateOrderStatus(id, newStatus);
 
-        return ResponseEntity.ok(order);
+        Order updatedOrder = orderService.getOrderById(id);
+        return ResponseEntity.ok(updatedOrder);
     }
 
     @GetMapping("/status/{status}")
@@ -97,4 +93,13 @@ public class OrderController {
         return ResponseEntity.ok(orders);
     }
 
+    // New endpoint for cached status only (optional)
+    @GetMapping("/{id}/cached-status")
+    public ResponseEntity<String> getCachedOrderStatus(@PathVariable Long id) {
+        String status = orderStatusService.getOrderStatus(id);
+        if (status == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(status);
+    }
 }

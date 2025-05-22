@@ -1,31 +1,38 @@
 package com.ilpalazzo.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ilpalazzo.ilpalazzoApplication;
+import com.ilpalazzo.model.dto.MenuItemRequestDto;
 import com.ilpalazzo.model.entity.MenuItem;
 import com.ilpalazzo.repository.MenuItemRepository;
+import com.ilpalazzo.ilpalazzoApplication;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
+import org.springframework.security.test.context.support.WithMockUser;
+
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-
+import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 
 @SpringBootTest(classes = ilpalazzoApplication.class)
 @AutoConfigureMockMvc
 @Transactional
 @ActiveProfiles("test")
-class MenuItemControllerIntegrationTest {
+public class MenuItemControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -37,101 +44,114 @@ class MenuItemControllerIntegrationTest {
     private ObjectMapper objectMapper;
 
     @BeforeEach
-    void cleanUp() {
+    void cleanDatabase() {
         menuItemRepository.deleteAll();
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void createMenuItem_shouldReturnCreatedItem() throws Exception {
-        MenuItem menuItem = new MenuItem();
-        menuItem.setName("Pizza");
-        menuItem.setDescription("Delicious cheese pizza");
-        menuItem.setPrice(new BigDecimal("9.99"));
-        menuItem.setCategory("Main Courses");
+        MenuItemRequestDto request = new MenuItemRequestDto();
+        request.setName("Pizza Margherita");
+        request.setDescription("Classic Italian pizza");
+        request.setPrice(new BigDecimal("12.99"));
+        request.setCategory("Main Course");
 
-        mockMvc.perform(post("/api/menuitems")
+        String response = mockMvc.perform(post("/api/menuitems")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(menuItem)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Pizza"))
-                .andExpect(jsonPath("$.price").value(9.99))
-                .andExpect(jsonPath("$.category").value("Main Courses"));
+                .content(objectMapper.writeValueAsString(request)))
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.id").exists())
+            .andExpect(jsonPath("$.name").value("Pizza Margherita"))
+            // Expect price as number
+            .andExpect(jsonPath("$.price").value(12.99))
+            .andExpect(jsonPath("$.category").value("Main Course"))
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+
+        System.out.println("Response JSON: " + response);
     }
 
+
     @Test
+    @WithMockUser(roles = "USER")
     void getAllMenuItems_shouldReturnList() throws Exception {
-        MenuItem m1 = new MenuItem();
-        m1.setName("Spaghetti");
-        m1.setDescription("With tomato sauce");
-        m1.setPrice(new BigDecimal("8.50"));
-        m1.setCategory("Main Courses");
+        // Insert one item directly to repo
+        MenuItem item = new MenuItem();
+        item.setName("Spaghetti Carbonara");
+        item.setDescription("Pasta with eggs, cheese, pancetta");
+        item.setPrice(new BigDecimal("14.50"));
+        item.setCategory("Main Course");
+        menuItemRepository.save(item);
 
-        MenuItem m2 = new MenuItem();
-        m2.setName("Tiramisu");
-        m2.setDescription("Classic dessert");
-        m2.setPrice(new BigDecimal("4.99"));
-        m2.setCategory("Appetizers");
-
-        menuItemRepository.save(m1);
-        menuItemRepository.save(m2);
-
-        mockMvc.perform(get("/api/menuitems"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2));
+        mockMvc.perform(get("/api/menuitems")
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$").isArray())
+            .andExpect(jsonPath("$[0].name").value("Spaghetti Carbonara"));
     }
 
     @Test
+    @WithMockUser(roles = "USER")
     void getMenuItemById_shouldReturnItem() throws Exception {
         MenuItem item = new MenuItem();
-        item.setName("Lasagna");
-        item.setDescription("Beef lasagna");
-        item.setPrice(new BigDecimal("10.00"));
-        item.setCategory("Main Courses");
+        item.setName("Tiramisu");
+        item.setDescription("Classic Italian dessert");
+        item.setPrice(new BigDecimal("6.00"));
+        item.setCategory("Dessert");
+        item = menuItemRepository.save(item);
 
-        MenuItem saved = menuItemRepository.save(item);
-
-        mockMvc.perform(get("/api/menuitems/" + saved.getId()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Lasagna"))
-                .andExpect(jsonPath("$.price").value(10.00));
+        mockMvc.perform(get("/api/menuitems/{id}", item.getId())
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.name").value("Tiramisu"))
+            .andExpect(jsonPath("$.category").value("Dessert"));
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void updateMenuItem_shouldUpdate() throws Exception {
-        MenuItem original = new MenuItem();
-        original.setName("Risotto");
-        original.setDescription("With mushrooms");
-        original.setPrice(new BigDecimal("11.00"));
-        original.setCategory("Main Courses");
+        MenuItem item = new MenuItem();
+        item.setName("Old Name");
+        item.setDescription("Old Description");
+        item.setPrice(new BigDecimal("10.00"));
+        item.setCategory("Old Category");
+        item = menuItemRepository.save(item);
 
-        MenuItem saved = menuItemRepository.save(original);
+        MenuItemRequestDto updateRequest = new MenuItemRequestDto();
+        updateRequest.setName("Updated Name");
+        updateRequest.setDescription("Updated Description");
+        updateRequest.setPrice(new BigDecimal("11.00"));
+        updateRequest.setCategory("Updated Category");
 
-        MenuItem updated = new MenuItem();
-        updated.setId(saved.getId());
-        updated.setName("Risotto Milanese");
-        updated.setDescription("Saffron risotto");
-        updated.setPrice(new BigDecimal("12.50"));
-        updated.setCategory("Main Courses");
-
-        mockMvc.perform(put("/api/menuitems/" + saved.getId())
+        mockMvc.perform(put("/api/menuitems/{id}", item.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(updated)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Risotto Milanese"))
-                .andExpect(jsonPath("$.price").value(12.50));
+                .content(objectMapper.writeValueAsString(updateRequest)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.name").value("Updated Name"))
+            .andExpect(jsonPath("$.price").value(11.00))
+            .andExpect(jsonPath("$.category").value("Updated Category"));
+
+        // Verify updated in DB
+        MenuItem updated = menuItemRepository.findById(item.getId()).orElseThrow();
+        assertThat(updated.getName()).isEqualTo("Updated Name");
+        assertThat(updated.getPrice()).isEqualByComparingTo(new BigDecimal("11.00"));
     }
 
     @Test
+    @WithMockUser(roles = "ADMIN")
     void deleteMenuItem_shouldDelete() throws Exception {
         MenuItem item = new MenuItem();
-        item.setName("Panna Cotta");
-        item.setDescription("Creamy dessert");
-        item.setPrice(new BigDecimal("5.50"));
-        item.setCategory("Appetizers");
+        item.setName("To be deleted");
+        item.setDescription("Description");
+        item.setPrice(new BigDecimal("5.00"));
+        item.setCategory("Category");
+        item = menuItemRepository.save(item);
 
-        MenuItem saved = menuItemRepository.save(item);
+        mockMvc.perform(delete("/api/menuitems/{id}", item.getId()))
+            .andExpect(status().isNoContent());
 
-        mockMvc.perform(delete("/api/menuitems/" + saved.getId()))
-                .andExpect(status().isNoContent());
+        assertThat(menuItemRepository.existsById(item.getId())).isFalse();
     }
 }

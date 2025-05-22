@@ -7,10 +7,14 @@ import com.ilpalazzo.repository.TableInformationRepository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import com.ilpalazzo.security.TestSecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,10 +24,21 @@ import java.util.List;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
+
+
 @SpringBootTest(classes = ilpalazzoApplication.class)
+@Import(OrderControllerIntegrationTest.TestSecurityConfig.class)
 @AutoConfigureMockMvc
-@Transactional
 @ActiveProfiles("test")
+@Transactional
+@ComponentScan(
+    excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = com.ilpalazzo.security.SecurityConfig.class)
+)
 class TableInformationControllerIntegrationTest {
 
     @Autowired
@@ -39,7 +54,8 @@ class TableInformationControllerIntegrationTest {
     void cleanUp() {
         tableInformationRepository.deleteAll();
     }
-
+ 
+    @WithMockUser(username = "testuser", roles = {"USER"})
     @Test
     void createTableInformation_shouldReturnCreated() throws Exception {
         TableInformation table = new TableInformation();
@@ -55,6 +71,7 @@ class TableInformationControllerIntegrationTest {
                 .andExpect(jsonPath("$.qrCodeUrl").value("http://example.com/qr"));
     }
 
+    @WithMockUser(username = "testuser", roles = {"USER"})
     @Test
     void getAllTableInformation_shouldReturnList() throws Exception {
         TableInformation t1 = new TableInformation();
@@ -74,6 +91,7 @@ class TableInformationControllerIntegrationTest {
                 .andExpect(jsonPath("$.length()").value(2));
     }
 
+    @WithMockUser(username = "testuser", roles = {"USER"})
     @Test
     void getTableInformationById_shouldReturnTable() throws Exception {
         TableInformation t = new TableInformation();
@@ -89,6 +107,7 @@ class TableInformationControllerIntegrationTest {
                 .andExpect(jsonPath("$.tableName").value("Specific Table"));
     }
 
+    @WithMockUser(username = "testuser", roles = {"USER"})
     @Test
     void getTableInformationByTableName_shouldReturnTable() throws Exception {
         TableInformation t = new TableInformation();
@@ -104,6 +123,7 @@ class TableInformationControllerIntegrationTest {
                 .andExpect(jsonPath("$.tableId").value(id));
     }
 
+    @WithMockUser(username = "testuser", roles = {"USER"})
     @Test
     void updateTableInformation_shouldUpdateSuccessfully() throws Exception {
         TableInformation t = new TableInformation();
@@ -127,6 +147,7 @@ class TableInformationControllerIntegrationTest {
                 .andExpect(jsonPath("$.qrCodeUrl").value("http://updated.url"));
     }
 
+    @WithMockUser(username = "testuser", roles = {"USER"})
     @Test
     void deleteTableInformation_shouldDeleteSuccessfully() throws Exception {
         TableInformation t = new TableInformation();
@@ -139,5 +160,17 @@ class TableInformationControllerIntegrationTest {
 
         mockMvc.perform(delete("/api/tableinformation/" + id))
                 .andExpect(status().isNoContent());
+    }
+
+    @Configuration
+    static class TestSecurityConfig {
+
+        @Bean
+        public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+            http
+                .csrf().disable()
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
+            return http.build();
+        }
     }
 }
