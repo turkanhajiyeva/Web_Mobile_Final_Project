@@ -13,7 +13,6 @@ const Cart = () => {
     if (cartItems.length === 0) return;
     setIsSubmitting(true);
     try {
-      // Get table ID from URL if present
       const params = new URLSearchParams(window.location.search);
       const urlTableId = params.get("table_id");
       const resolvedTableId = urlTableId || tableNumber.trim();
@@ -22,7 +21,7 @@ const Cart = () => {
         throw new Error("Table number is required to place an order.");
       }
       const orderData = {
-      userId: user?.id, // Add this line
+        userId: user?.id, // Add this line
         tableId: resolvedTableId,
         items: cartItems.map(item => ({
           menuItemId: item.id,

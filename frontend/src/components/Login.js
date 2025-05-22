@@ -40,6 +40,7 @@ const Login = () => {
       }
 
       const data = await res.json();
+      console.log(data);
       setMessage(
           isRegistering
               ? "Registration successful. Please log in."
@@ -47,7 +48,7 @@ const Login = () => {
       );
 
       if (!isRegistering) {
-        login({ username: data.username, role: data.role });
+        login({userid: data.userId, username: data.username, role: data.role });
         navigate("/");
       } else {
         setIsRegistering(false);
