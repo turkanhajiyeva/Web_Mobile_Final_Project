@@ -48,7 +48,7 @@ const Home = () => {
 
     return (
         <>
-            <h3 id="NewsHeading">IL'PALAZZO PIZZERIA HOT NEWS:</h3>
+            <h3 id="NewsHeading">IL'PALAZZO RESTAURANT HOT NEWS:</h3>
 
             <Carousel className="carousel-custom">
                 <Carousel.Item>
@@ -56,48 +56,49 @@ const Home = () => {
                         <div className="col-md-6">
                             <img
                                 className="d-block w-100"
-                                src={isMobile ? './images/MikuPizza.jpg' : './images/MikuPizzaPC.png'}
-                                alt="Miku Pizza"
+                                src={isMobile ? './images/MikuPizza.jpg' : './images/MikuPizza.jpg'}
+                                alt="Delicious Pizza"
                             />
                         </div>
                         <div className="col-md-6 p-4">
-                            <h2 className="fw-bold">Hatsune Miku orders food from «IL'PALAZZO»</h2>
+                            <h2 className="fw-bold">Try Our Signature Pizza!</h2>
                             <p className="text-muted">
-                                Order 2 «Arizona Hot Pizza» and get a free Hatsune Miku badge.
+                                Order 2 «Arizona Hot Pizza» and get a free drink of your choice.
                             </p>
-                            <button className="btn btn-miku">Order</button>
+                            <button className="btn btn-miku">Order Now</button>
                         </div>
                     </div>
                 </Carousel.Item>
                 <Carousel.Item>
                     <div className="d-flex align-items-center carousel-custom-height" style={{ backgroundColor: '#fff' }}>
                         <div className="col-md-6">
-                            <img className="d-block w-100" src="./images/horsin_around.jpg" alt="Horse chief?" />
+                            <img className="d-block w-100" src="./images/horsin_around.jpg" alt="Chef Special" />
                         </div>
                         <div className="col-md-6 p-4">
-                            <h2 className="fw-bold">Our chef is... A HORSE?</h2>
+                            <h2 className="fw-bold">Meet Our Star Chef!</h2>
                             <p className="text-muted">
-                                If you assume we have to investigate if this rumor is true click below.
+                                Our culinary experts craft meals with passion. Try our chef’s special today!
                             </p>
-                            <button className="btn btn-miku">Details</button>
+                            <button className="btn btn-miku">View Specials</button>
                         </div>
                     </div>
                 </Carousel.Item>
                 <Carousel.Item>
                     <div className="d-flex align-items-center carousel-custom-height" style={{ backgroundColor: '#fff' }}>
                         <div className="col-md-6">
-                            <img className="d-block w-100" src={isMobile ? './images/kekw.jpg' : './images/Bocchi.jpg'} alt="Miku Pizza" />
+                            <img className="d-block w-100" src={isMobile ? './images/kekw.jpg' : './images/Bocchi.jpg'} alt="Fresh Ingredients" />
                         </div>
                         <div className="col-md-6 p-4">
-                            <h2 className="fw-bold">OFFICIAL STATEMENT: We don't support gender equality</h2>
+                            <h2 className="fw-bold">Fresh Ingredients, Amazing Taste!</h2>
                             <p className="text-muted">
-                                Unless you buy crispy cream donuts for $2.99.
+                                We use only the freshest ingredients to create unforgettable flavors.
                             </p>
-                            <button className="btn btn-miku">Add to Cart</button>
+                            <button className="btn btn-miku">Explore Our Menu</button>
                         </div>
                     </div>
                 </Carousel.Item>
             </Carousel>
+
 
             {/* Division Line */}
             <div className="divline">
