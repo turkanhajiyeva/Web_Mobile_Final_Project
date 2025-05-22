@@ -22,6 +22,7 @@ const Cart = () => {
         throw new Error("Table number is required to place an order.");
       }
       const orderData = {
+      userId: user?.id, // Add this line
         tableId: resolvedTableId,
         items: cartItems.map(item => ({
           menuItemId: item.id,
