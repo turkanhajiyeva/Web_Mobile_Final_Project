@@ -22,19 +22,23 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+            .cors()
+            .and()
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers(HttpMethod.POST, "/api/logininfo").permitAll()   // Allow POST for registration
-                .requestMatchers("/api/logininfo/authenticate").permitAll()       // Allow authenticate (POST)
-                .requestMatchers(HttpMethod.GET, "/**").permitAll()                // Allow GET everywhere
+                .requestMatchers(HttpMethod.POST, "/api/logininfo").permitAll()
+                .requestMatchers("/api/logininfo/authenticate").permitAll()
+                .requestMatchers(HttpMethod.GET, "/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/orders").permitAll()
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
 
 
-    // Provide AuthenticationManager bean if needed elsewhere
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();

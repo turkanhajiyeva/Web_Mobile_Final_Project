@@ -10,11 +10,10 @@ const statusOptions = [
 
 const STAFF_ROLES = ['Manager', 'Waiter', 'Kitchen Staff'];
 
-// Mock auth context for demo - replace with your actual auth context
 const mockUser = { id: 1, role: 'Kitchen Staff', name: 'John Doe' };
 
 const StaffDashboard = () => {
-  const user = mockUser; // Replace with: const { user } = useAuth();
+  const user = mockUser; 
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

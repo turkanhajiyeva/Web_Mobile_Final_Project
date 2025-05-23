@@ -56,6 +56,7 @@ const Cart = () => {
           "Authorization": `Bearer ${user.token}` 
         },
         body: JSON.stringify(orderData),
+        credentials: "include", 
       });
 
       const responseData = await response.json();
